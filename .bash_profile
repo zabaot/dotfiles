@@ -1,12 +1,14 @@
-
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+screen -xR
+
+#export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 alias ls="ls -GF"
 export LSCOLORS=gxfxcxdxbxegedabagacad
+export HISTCONTROL=ignoredups
 
 export PYENV_ROOT="${HOME}/.pyenv"
 if [ -d "${PYENV_ROOT}" ]; then
