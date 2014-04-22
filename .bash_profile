@@ -1,6 +1,6 @@
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 
-screen -xR
+#screen -xR
 
 #export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
