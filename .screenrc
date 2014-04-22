@@ -1,2 +1,2 @@
-shell -$SHELL
-
+#shell -$SHELL
+shell /opt/local/bin/bash
