@@ -17,5 +17,15 @@ if [ -d "${PYENV_ROOT}" ]; then
     eval "$(pyenv init -)"
 fi
 
+# MacPorts Bash shell command completion
+if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
+  . /opt/local/etc/profile.d/bash_completion.sh
+fi
+
+#GitPrompt
+if [ -f /opt/local/share/git-core/git-prompt.sh ]; then
+  . /opt/local/share/git-core/git-prompt.sh
+fi
+
 
 PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
