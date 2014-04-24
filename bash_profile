@@ -5,7 +5,7 @@ if [ $ENV = "CYGWIN" ] ; then
   export PAGER=lv
   PS1='[ \[\e[1;36m\]\w \[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
   alias ls="ls --color=yes -F"
-elif [ $ENV="darwin" || $ENV="Linux" ] ; then
+elif [ $ENV="darwin" ] || [ $ENV="Linux" ] ; then
   screen -xR
   PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
   alias ls="ls -GF"
