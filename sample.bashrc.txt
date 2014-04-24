@@ -1,0 +1,230 @@
+# ctrl+s で出力がロックされてしまうのを防ぐ
+stty stop undef
+
+bind 'set completion-ignore-case on'
+
+umask 022
+ulimit -c 0
+unset MAIL
+
+# bash_completion
+if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
+    . /opt/local/etc/profile.d/bash_completion.sh
+elif [ -f /sw/etc/profile.d/bash_completion.sh ]; then
+    . /sw/etc/profile.d/bash_completion.sh
+fi
+
+# git_completion
+if [ -f ~/bin/git-completion.bash ]; then
+    . ~/bin/git-completion.bash
+fi
+
+export COLOR_NC='\e[0m' # No Color
+export COLOR_WHITE='\e[1;37m'
+export COLOR_BLACK='\e[0;30m'
+export COLOR_BLUE='\e[0;34m'
+export COLOR_LIGHT_BLUE='\e[1;34m'
+export COLOR_GREEN='\e[0;32m'
+export COLOR_LIGHT_GREEN='\e[1;32m'
+export COLOR_CYAN='\e[0;36m'
+export COLOR_LIGHT_CYAN='\e[1;36m'
+export COLOR_RED='\e[0;31m'
+export COLOR_LIGHT_RED='\e[1;31m'
+export COLOR_PURPLE='\e[0;35m'
+export COLOR_LIGHT_PURPLE='\e[1;35m'
+export COLOR_BROWN='\e[0;33m'
+export COLOR_YELLOW='\e[1;33m'
+export COLOR_GRAY='\e[0;30m'
+export COLOR_LIGHT_GRAY='\e[1;30m'
+
+export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
+export LANG='ja_JP.UTF-8'
+export LC_ALL='ja_JP.UTF-8'
+export LC_MESSAGES='ja_JP.UTF-8'
+export LC_CTYPE=C
+export LESSCHARSET=utf-8
+export DISPLAY=:0.0
+export TERM=xterm-color
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+
+function share_history {
+    history -a
+    history -c
+    history -r
+}
+PROMPT_COMMAND='share_history'
+shopt -u histappend
+export HISTSIZE=100000
+
+type lv > /dev/null 2>&1 | grep -i 'not found'
+if [ $? -eq 1 ] ; then
+    export PAGER='lv'
+fi
+
+if [ -d /opt/local/bin ] ; then
+    export PATH=/opt/local/bin:$PATH
+fi
+if [ -d /opt/local/sbin ] ; then
+    export PATH=/opt/local/sbin:$PATH
+fi
+if [ -d /usr/X11R6/bin ] ; then
+    export PATH=/usr/X11R6/bin:$PATH
+fi
+if [ -d /opt/local/sbin ] ; then
+    export PATH=/opt/local/sbin:$PATH
+fi
+if [ -d $HOME/bin ] ; then
+    export PATH=$HOME/bin:$PATH
+fi
+if [ -d $HOME/perl5/bin ] ; then
+    export PATH=$HOME/perl5/bin:$PATH
+fi
+
+if [ -d $HOME/perl5/lib/perl5 ] ; then
+    export PERL5OPT="-Mlib=$HOME/perl5/lib/perl5"
+fi
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+
+# plenv OR perlbrew OR none
+if [ -d ~/.plenv ] ; then
+    export PATH="$HOME/.plenv/bin:$PATH"
+    eval "$(plenv init -)"
+    export RBENV_ROOT=$HOME/.rbenv
+    export PATH=$PATH:.plenv/versions/$(plenv global)/bin:$RBENV_ROOT/bin
+    eval "$(rbenv init -)"
+elif [ -f $HOME/perl5/perlbrew/etc/bashrc ] ; then
+    $HOME/perl5/perlbrew/etc/bashrc
+fi
+
+if [ -f /opt/local/libexec/perl5.12/sitebin/plsense ] ; then
+    alias plsense='/opt/local/libexec/perl5.12/sitebin/plsense'
+fi
+
+# fink
+if [ -f /sw/bin/init.sh ] ; then
+    . /sw/bin/init.sh
+fi
+
+if [ "$(uname)" = 'Darwin' ]; then
+    export LSCOLORS=xbfxcxdxbxegedabagacad
+    alias ls='ls -G'
+else
+    type dircolors > /dev/null 2>&1 | grep -i 'not found'
+    if [ $? -eq 1 ] ; then
+        eval `dircolors ~/.colorrc`
+    fi
+    alias ls='ls --color=auto'
+fi
+
+alias la='ls -aF'
+alias ll='ls -alF'
+alias cd='cd_proml'
+alias mv='mv -i'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mkdirp='mkdir -p'
+alias findp='find `pwd`'
+alias findf='find -type f -name'
+alias findd='find -type d -name'
+alias findpf='findp -type f -name'
+alias findpd='findp -type d -name'
+alias grep='grep --color=auto --no-messages --binary-files=without-match'
+alias grepr='grepr -r'
+alias git='git_proml'
+
+type emacs > /dev/null 2>&1 | grep -i 'not found'
+if [ $? -eq 1 ] ; then
+    export EDITOR="emacs"
+fi
+
+type emacs-24.3 > /dev/null 2>&1 | grep -i 'not found'
+if [ $? -eq 1 ] ; then
+    alias emacs='emacs-24.3'
+    export EDITOR="emacs-24.3"
+fi
+
+type colordiff > /dev/null 2>&1 | grep -i 'not found'
+if [ $? -eq 1 ] ; then
+    alias diff='colordiff'
+fi
+
+function parse_git_branch {
+    type git > /dev/null 2>&1 | grep -i 'not found'
+    if [ $? -eq 1 ] ; then
+        \git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    fi
+}
+
+function proml {
+    pwd_str="$(pwd | sed -e "s|$HOME|~|")"
+
+    prompt_str="[$(whoami)@$(hostname | cut -d'.' -f1):${pwd_str}$(parse_git_branch)]"
+    cols=$(expr $(tput cols) - ${#prompt_str})
+    margin=$(printf "%${cols}s" "[$(date +'%Y-%m-%d %H:%M:%S')]" | cut -d'[' -f1)
+    PS1="[${COLOR_LIGHT_RED}\u${COLOR_NC}${COLOR_LIGHT_GRAY}@\h${COLOR_NC}:${COLOR_LIGHT_CYAN}\w${COLOR_NC}${COLOR_LIGHT_BLUE}$(parse_git_branch)${COLOR_NC}]${margin}${COLOR_LIGHT_GREEN}[$(date +"%Y-%m-%d") \t]${COLOR_NC}\n$ "
+}
+
+function cd_proml {
+    \cd $1
+    proml
+}
+
+function git_proml () {
+    \git $@
+    proml
+}
+
+trap "proml" 28
+
+proml
+
+#
+# https://alias.sh
+#
+alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias sweep='find ~ -type f \( -name '*.swp' -o -name 'wget.log' -o -name 'foobar*' -o -name '*~' -o -name '.netrwhist'  \) -delete'
+alias ..1='cd ..'
+alias ..2='cd ../../'
+alias ..3='cd ../../../'
+alias ..4='cd ../../../../'
+alias ..5='cd ../../../../../'
+alias ..6='cd ../../../../../../'
+alias ..7='cd ../../../../../../../'
+alias ..8='cd ../../../../../../../../'
+
+function mcd () {
+  mkdir -p "$1" && cd "$1";
+}
+
+function extract () {
+    if [ -f $1 ] ; then
+      case $1 in
+        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.gz)    tar xzf $1     ;;
+        *.bz2)       bunzip2 $1     ;;
+        *.rar)       unrar e $1     ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xf $1      ;;
+        *.tbz2)      tar xjf $1     ;;
+        *.tgz)       tar xzf $1     ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+
+function t () {
+    tail -f $1 | perl -pe "s/$2/\e[1;31;43m$&\e[0m/g"
+}
+
+function ltree () {
+    tree -C $* | less -R
+}
+
+function refre_sh () {
+    . ~/.bashrc
+}
