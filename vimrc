@@ -1,4 +1,6 @@
 set nocompatible
+set title          "編集中のファイル名を表示
+syntax on          "コードの色分け
 set number         " 行番号を表示する
 set cursorline     " カーソル行の背景色を変える
 set cursorcolumn   " カーソル位置のカラムの背景色を変える
@@ -9,7 +11,8 @@ set showmatch      " 対応する括弧を強調表示
 set helpheight=999 " ヘルプを画面いっぱいに開く
 set list           " 不可視文字を表示
 " 不可視文字の表示記号指定
-set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
+"set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
 set backspace=indent,eol,start "Backspaceキーの影響範囲に制限を設けない
 set whichwrap=b,s,h,l,<,>,[,] "行頭行末の左右移動で行をまたぐ
