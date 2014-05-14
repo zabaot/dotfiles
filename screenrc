@@ -2,3 +2,5 @@
 startup_message off
 
 shell -$SHELL
+startup_message off
+
