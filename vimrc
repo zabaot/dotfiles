@@ -1,5 +1,5 @@
 set nocompatible
-set title          "編集中のファイル名を表示
+set notitle          "編集中のファイル名を表示
 syntax on          "コードの色分け
 set number         " 行番号を表示する
 set cursorline     " カーソル行の背景色を変える
