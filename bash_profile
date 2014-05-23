@@ -11,6 +11,10 @@ else
   PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
   alias ls="ls -GF"
 fi
+
+#tmux256色強制対応エイリアス
+alias tmux="tmux -2"
+
 #export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
