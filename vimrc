@@ -45,3 +45,8 @@ nmap <C-k> :Gtags -r <C-r><C-w><CR>
 nmap <C-n> :cn<CR>
 nmap <C-p> :cp<CR>
 
+" md as markdown, instead of modula2
+autocmd MyAutoGroup BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+
+" Disable highlight italic in Markdown
+"autocmd MyAutoGroup FileType markdown hi! def link markdownItalic LineNr
