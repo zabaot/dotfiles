@@ -60,3 +60,11 @@ imap ” ”<Left>
 imap <> <><Left>
 imap “ “<Left>
 
+"行末の不要なスペース削除
+function! RTrim()
+let s:cursor = getpos(.)
+%s/\s\+$//e
+call setpos(., s:cursor)
+endfunction
+
+autocmd BufWritePre *.php,*.rb,*.js,*.bat call RTrim()
