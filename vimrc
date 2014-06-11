@@ -50,3 +50,13 @@ au BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 
 " Disable highlight italic in Markdown
 "autocmd MyAutoGroup FileType markdown hi! def link markdownItalic LineNr
+
+"(),[],{},<>,””,’’,“入力+()の中にカーソル戻す
+imap {} {}<Left>
+imap [] []<Left>
+imap () ()<Left>
+imap “” “”<Left>
+imap ” ”<Left>
+imap <> <><Left>
+imap “ “<Left>
+
