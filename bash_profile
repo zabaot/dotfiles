@@ -35,8 +35,8 @@ if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
 fi
 
 #GitPrompt
-if [ -f /opt/local/share/git-core/git-prompt.sh ]; then
-  . /opt/local/share/git-core/git-prompt.sh
+if [ -f /opt/local/share/git/git-prompt.sh ]; then
+  . /opt/local/share/git/git-prompt.sh
 fi
 
 
