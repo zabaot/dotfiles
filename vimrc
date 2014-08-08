@@ -69,3 +69,7 @@ call setpos(., s:cursor)
 endfunction
 
 autocmd BufWritePre *.php,*.rb,*.js,*.bat call RTrim()
+
+"検索によるハイライトを無効化するショートカット
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
