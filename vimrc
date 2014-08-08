@@ -39,7 +39,7 @@ set t_Co=256 "Vim256色対応
 "gtag設定
 nmap <C-q> <C-w><C-w><C-w>q
 nmap <C-g> :Gtags -g
-nmap <C-l> :Gtags -f %<CR>
+nmap <C-i> :Gtags -f %<CR>
 nmap <C-j> :GtagsCursor<CR>
 nmap <C-k> :Gtags -r <C-r><C-w><CR>
 nmap <C-n> :cn<CR>
