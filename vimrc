@@ -73,12 +73,3 @@ autocmd BufWritePre *.php,*.rb,*.js,*.bat call RTrim()
 "検索によるハイライトを無効化するショートカット
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
-filetype off
-
-set rtp+=~/dotfiles/vimfiles/vundle.git        "vundleのディレクトリ
-call vundle#rc()
-"Bundle 'Shougo/neocomplcache'        "Bundle...は使用するプラグインを書く
-"Bundle 'Shougo/unite.vim'
-"Bundle 'thinca/vim-ref'
-"Bundle 'thinca/vim-quickrun'
-filetype plugin indent on     " required!
