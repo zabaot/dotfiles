@@ -19,6 +19,7 @@ alias tmux="tmux -2"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
+export GIT_EDITOR=vim
 
 export LSCOLORS=gxfxcxdxbxegedabagacad
 export HISTCONTROL=ignoreboth
@@ -39,4 +40,7 @@ if [ -f /opt/local/share/git/git-prompt.sh ]; then
   . /opt/local/share/git/git-prompt.sh
 fi
 
+# MacPorts Installer addition on 2014-10-23_at_11:58:33: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
 
