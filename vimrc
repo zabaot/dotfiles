@@ -2,14 +2,26 @@ set nocompatible
 set notitle          "編集中のファイル名を表示
 syntax on          "コードの色分け
 set number         " 行番号を表示する
+<<<<<<< master
 set ambiwidth=double
 "set cursorline     " カーソル行の背景色を変える
 "set cursorcolumn   " カーソル位置のカラムの背景色を変える
+=======
+<<<<<<< mactest
+set cursorline     " カーソル行の背景色を変える
+set cursorcolumn   " カーソル位置のカラムの背景色を変える
+=======
+set ambiwidth=double "Unicodeで行末が変になる問題を解決
+"set cursorline     " カーソル行の背景色を変える
+"set cursorcolumn   " カーソル位置のカラムの背景色を変える
+>>>>>>> local
+>>>>>>> local
 set laststatus=2   " ステータス行を常に表示
 set statusline=%<%f\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=\ (%v,%l)/%L%8P\    " ファイルエンコーディングや文字コードをステータス行に表示する
 set cmdheight=2    " メッセージ表示欄を2行確保
 set showmatch      " 対応する括弧を強調表示
 set helpheight=999 " ヘルプを画面いっぱいに開く
+set formatoptions-=c "フォーマット揃えをコメント以外有効にする
 set list           " 不可視文字を表示
 " 不可視文字の表示記号指定
 "set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
@@ -72,4 +84,8 @@ autocmd BufWritePre *.php,*.rb,*.js,*.bat call RTrim()
 
 "検索によるハイライトを無効化するショートカット
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+"複数ファイルの編集を可能にする
+set hidden
+
 
