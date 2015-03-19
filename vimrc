@@ -2,20 +2,12 @@ set nocompatible
 set notitle          "編集中のファイル名を表示
 syntax on          "コードの色分け
 set number         " 行番号を表示する
-<<<<<<< master
 set ambiwidth=double
 "set cursorline     " カーソル行の背景色を変える
 "set cursorcolumn   " カーソル位置のカラムの背景色を変える
-=======
-<<<<<<< mactest
-set cursorline     " カーソル行の背景色を変える
-set cursorcolumn   " カーソル位置のカラムの背景色を変える
-=======
 set ambiwidth=double "Unicodeで行末が変になる問題を解決
 "set cursorline     " カーソル行の背景色を変える
 "set cursorcolumn   " カーソル位置のカラムの背景色を変える
->>>>>>> local
->>>>>>> local
 set laststatus=2   " ステータス行を常に表示
 set statusline=%<%f\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=\ (%v,%l)/%L%8P\    " ファイルエンコーディングや文字コードをステータス行に表示する
 set cmdheight=2    " メッセージ表示欄を2行確保
