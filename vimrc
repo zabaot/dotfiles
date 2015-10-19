@@ -1,6 +1,10 @@
 set nocompatible
 set notitle          "編集中のファイル名を表示
 syntax on          "コードの色分け
+
+set fileencoding=utf-8
+set fileformat=unix
+
 set number         " 行番号を表示する
 set ambiwidth=double
 "set cursorline     " カーソル行の背景色を変える
@@ -15,8 +19,8 @@ set showmatch      " 対応する括弧を強調表示
 set helpheight=999 " ヘルプを画面いっぱいに開く
 set formatoptions-=c "フォーマット揃えをコメント以外有効にする
 set list           " 不可視文字を表示
+
 " 不可視文字の表示記号指定
-"set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮
 set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
 set backspace=indent,eol,start "Backspaceキーの影響範囲に制限を設けない
@@ -80,4 +84,22 @@ nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 "複数ファイルの編集を可能にする
 set hidden
 
+if has('gui_macvim')
+	set showtabline=2    " タブを常に表示
+	set transparency=5   " 透明度
+	set imdisable        " IME OFF
+	set guioptions-=T    " ツールバー非表示
+	set antialias        " アンチエイリアス
+	set tabstop=4        " タブサイズ
+	set number           " 行番号表示
+	set nobackup         " バックアップなし
+	set visualbell t_vb= " ビープ音なし
+"	colorscheme desert   " カラースキーマ
+	set columns=100      " 横幅
+	set lines=35         " 行数
+	set nowrapscan       " 検索をファイルの先頭へループしない
+	" フォント設定
+	set guifontwide=Osaka:h12
+	set guifont=Osaka-Mono:h14
+endif
 
