@@ -5,7 +5,9 @@ if has('win32')
 	"set guifont=MS_Mincho:h12:cSHIFTJIS
 	" 行間隔の設定
 	set linespace=1
+	set guioptions-=T    " ツールバー非表示
 	" 一部のUCS文字の幅を自動計測して決める
+	colorscheme wombat256
 	if has('kaoriya')
 		set ambiwidth=auto
 	endif
@@ -15,13 +17,13 @@ elseif has('mac')
 	set guioptions-=T    " ツールバー非表示
 	set antialias        " アンチエイリアス
 	set tabstop=4        " タブサイズ
-	set number           " 行番号表示
 	set nobackup         " バックアップなし
 	set visualbell t_vb= " ビープ音なし
 	set columns=100      " 横幅
 	set lines=35         " 行数
 	set nowrapscan       " 検索をファイルの先頭へループしない
-	" フォント設定
+	colorscheme wombat256
+	set imdisable
 elseif has('xfontset')
 	" UNIX用 (xfontsetを使用)
 	set guifontset=a14,r14,k14
@@ -33,11 +35,9 @@ au BufNewFile,BufRead * match ZenkakuSpace /　/
 "常にタブを表示
 set showtabline=2
 
-set imdisable
 "透明度を変更
 set transparency=20
 map  gw :macaction selectNextWindow:
 map  gW :macaction selectPreviousWindow:
 
-colorscheme wombat256
 
