@@ -1,10 +1,3 @@
-"フォント設定
-"set guifontwide=Osaka:h12
-"set guifont=Osaka-Mono:h14
-
-"---------------------------------------------------------------------------
-" フォント設定:
-"
 if has('win32')
 	" Windows用
 	"set guifont=MS_Gothic:h11:b:cSHIFTJIS
@@ -18,6 +11,17 @@ if has('win32')
 	endif
 elseif has('mac')
 	set guifont=Osaka－等幅:h14
+	set showtabline=2    " タブを常に表示
+	set guioptions-=T    " ツールバー非表示
+	set antialias        " アンチエイリアス
+	set tabstop=4        " タブサイズ
+	set number           " 行番号表示
+	set nobackup         " バックアップなし
+	set visualbell t_vb= " ビープ音なし
+	set columns=100      " 横幅
+	set lines=35         " 行数
+	set nowrapscan       " 検索をファイルの先頭へループしない
+	" フォント設定
 elseif has('xfontset')
 	" UNIX用 (xfontsetを使用)
 	set guifontset=a14,r14,k14
@@ -28,8 +32,12 @@ highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=#666666
 au BufNewFile,BufRead * match ZenkakuSpace /　/
 "常にタブを表示
 set showtabline=2
+
+set imdisable
 "透明度を変更
-set transparency=3
+set transparency=20
 map  gw :macaction selectNextWindow:
 map  gW :macaction selectPreviousWindow:
+
+colorscheme wombat256
 
