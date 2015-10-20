@@ -7,7 +7,7 @@ if has('win32')
 	set linespace=1
 	set guioptions-=T    " ツールバー非表示
 	" 一部のUCS文字の幅を自動計測して決める
-	colorscheme wombat256
+	colorscheme desert
 	if has('kaoriya')
 		set ambiwidth=auto
 	endif
