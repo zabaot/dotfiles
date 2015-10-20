@@ -5,6 +5,10 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 #export HISTCONTROL=ignoreboth
 alias ls="ls -GF"
 
+export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
+alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
+
 #GitPrompt
 if [ -f /opt/local/share/git/git-prompt.sh ]; then
   . /opt/local/share/git/git-prompt.sh
