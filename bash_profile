@@ -25,11 +25,8 @@ if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
     . /opt/local/etc/profile.d/bash_completion.sh
 fi
 
-##
-# Your previous /Users/osiris/.bash_profile file was backed up as /Users/osiris/.bash_profile.macports-saved_2015-10-02_at_12:07:17
-##
-
-# MacPorts Installer addition on 2015-10-02_at_12:07:17: adding an appropriate PATH variable for use with MacPorts.
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
+#pyenv environment
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+eval "$(pyenv init -)"
 
