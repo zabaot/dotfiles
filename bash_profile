@@ -30,3 +30,6 @@ export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init -)"
 
+#virtualenv environment
+eval "$(pyenv virtualenv-init -)"
+
