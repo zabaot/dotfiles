@@ -3,6 +3,10 @@ set nocompatible
 set notitle          "編集中のファイル名を表示
 syntax on          "コードの色分け
 set t_Co=256 "Vim256色対応
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
+set background=dark
 
 "Encoding
 set encoding=utf-8
