@@ -125,7 +125,7 @@ if ! empty(neobundle#get("jedi-vim"))
     xmap <Leader>j [jedi]
 
     let g:jedi#completions_command = "<C-Space>"    " 補完キーの設定この場合はCtrl+Space
-    let g:jedi#goto_assignments_command = "<C-l>"   " 変数の宣言場所へジャンプ（Ctrl + l)
+    let g:jedi#goto_assignments_command = "<C-b>"   " 変数の宣言場所へジャンプ（Ctrl + b)
     let g:jedi#goto_definitions_command = "<C-a>"   " クラス、関数定義にジャンプ（Gtrl + a）
     let g:jedi#documentation_command = "<C-q>"      " Pydocを表示（Ctrl + q）
     let g:jedi#rename_command = "[jedi]r"
