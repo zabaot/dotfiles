@@ -100,6 +100,9 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vinarise'
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'tomasr/molokai'
+NeoBundle 'plasticboy/vim-markdown'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
 
 "Python補完
 "NeoBundle 'davidhalter/jedi-vim'
@@ -144,3 +147,7 @@ if ! empty(neobundle#get("jedi-vim"))
             \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
     endif
 endif
+
+"Markdown
+"au BufRead,BufNewFile *.md set filetype=markdown
+"
