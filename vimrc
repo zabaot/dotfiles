@@ -103,7 +103,7 @@ NeoBundle 'tomasr/molokai'
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'kannokanno/previm'
 NeoBundle 'tyru/open-browser.vim'
-
+NeoBundle 'davidhalter/jedi-vim'
 "Python補完
 "NeoBundle 'davidhalter/jedi-vim'
 
@@ -116,8 +116,18 @@ syntax on
 NeoBundleCheck
 
 " Jedi for python
-NeoBundleLazy "davidhalter/jedi-vim", {
-     \ "autoload": { "filetypes": [ "python", "python3", "djangohtml"] }}
+"NeoBundleLazy "davidhalter/jedi-vim", {
+"     \ "autoload": { "filetypes": [ "python", "python3", "djangohtml"] }}
+
+
+" Do not load vim-pyenv until *.py is opened and
+" " make sure that it is loaded after jedi-vim is loaded.
+NeoBundleLazy 'lambdalisue/vim-pyenv', {
+    \ 'depends': ['davidhalter/jedi-vim'],
+    \ 'autoload': {
+    \   'filetypes': ['python', 'python3'],
+    \ }}
+
 if ! empty(neobundle#get("jedi-vim"))
     let g:jedi#auto_initialization = 1
     let g:jedi#auto_vim_configuration = 1
@@ -146,6 +156,18 @@ if ! empty(neobundle#get("jedi-vim"))
         let g:neocomplete#force_omni_input_patterns.python =
             \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
     endif
+endif
+
+if jedi#init_python()
+    function! s:jedi_auto_force_py_version() abort
+        let major_version = pyenv#python#get_internal_major_version()
+        call jedi#force_py_version(major_version)
+    endfunction
+    augroup vim-pyenv-custom-augroup
+        autocmd! *
+        autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+        autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+    augroup END
 endif
 
 "Markdown
