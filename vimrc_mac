@@ -1,16 +1,7 @@
 "VIM setting
 set nocompatible
 set notitle          "編集中のファイル名を表示
-<<<<<<< HEAD
 set noundofile
-=======
-syntax on          "コードの色分け
-set t_Co=256 "Vim256色対応
-colorscheme molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
-set background=dark
->>>>>>> 83b97e9... edit
 
 "Encoding
 set encoding=utf-8
@@ -20,10 +11,7 @@ set fileformat=unix
 
 "Display
 set number         " 行番号を表示する
-<<<<<<< HEAD
 set ambiwidth=double
-=======
->>>>>>> 83b97e9... edit
 set cursorline     " カーソル行の背景色を変える
 set cursorcolumn   " カーソル位置のカラムの背景色を変える
 set ambiwidth=double "Unicodeで行末が変になる問題を解決
@@ -34,13 +22,8 @@ set showmatch      " 対応する括弧を強調表示
 set matchtime=3    " showmatchの表示時間
 set helpheight=999 " ヘルプを画面いっぱいに開く
 set formatoptions-=c "フォーマット揃えをコメント以外有効にする
-<<<<<<< HEAD
 set list           " 不可視文字を表示
 
-=======
-
-set list           " 不可視文字を表示
->>>>>>> 83b97e9... edit
 " 不可視文字の表示記号指定
 set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
@@ -66,24 +49,14 @@ set wrapscan "最後尾まで検索を終えたら次の検索で先頭に移る
 set gdefault "置換の時 g オプションをデフォルトで有効にする
 
 "gtag設定
-<<<<<<< HEAD
-=======
-
 let Gtags_Auto_Map = 1
->>>>>>> 83b97e9... edit
 "nmap <C-q> <C-w><C-w><C-w>q
 nmap <C-g> :Gtags -g
 nmap <C-i> :Gtags -f %<CR>
 nmap <C-j> :GtagsCursor<CR>
 nmap <C-k> :Gtags -r <C-r><C-w><CR>
-<<<<<<< HEAD
 nmap <C-n> :cn<CR>
 nmap <C-p> :cp<CR>
-=======
-"nmap <C-n> :cn<CR>
-"nmap <C-p> :cp<CR>
->>>>>>> 83b97e9... edit
-
 "検索によるハイライトを無効化するショートカット
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
@@ -122,13 +95,9 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vinarise'
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'tomasr/molokai'
-<<<<<<< HEAD
 " Hybiridカラースキーム
 NeoBundle 'w0ng/vim-hybrid'
 "NeoBundle 'plasticboy/vim-markdown'
-=======
-NeoBundle 'plasticboy/vim-markdown'
->>>>>>> 83b97e9... edit
 NeoBundle 'kannokanno/previm'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'davidhalter/jedi-vim'
@@ -139,20 +108,12 @@ call neobundle#end()
 
 filetype plugin indent on     " required!
 filetype indent on
-<<<<<<< HEAD
-=======
-syntax on
->>>>>>> 83b97e9... edit
 
 NeoBundleCheck
 
 " Jedi for python
-<<<<<<< HEAD
 "NeoBundleLazy "davidhalter/jedi-vim", {
 "     \ "autoload": { "filetypes": [ "python", "python3", "djangohtml"] }}
-=======
-NeoBundleLazy 'davidhalter/jedi-vim'
->>>>>>> 83b97e9... edit
 
 
 " Do not load vim-pyenv until *.py is opened and
@@ -208,11 +169,8 @@ endif
 "Markdown
 "au BufRead,BufNewFile *.md set filetype=markdown
 "
-<<<<<<< HEAD
 "
 syntax on          "コードの色分け
 colorscheme molokai
 set t_Co=256 "Vim256色対応
 
-=======
->>>>>>> 83b97e9... edit
