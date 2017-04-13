@@ -135,3 +135,5 @@ fi
 # git diff-highlight設定 git 2.9以上
 export PATH=$PATH:/usr/share/doc/git/contrib/diff-highlight
 
+export PROMPT_COMMAND='history -a; history -r'
+
