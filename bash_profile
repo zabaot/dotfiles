@@ -1,35 +1,28 @@
-#tmux256色強制対応エイリアス
-#alias tmux="tmux -2"
+# .bashrc
 
-export LSCOLORS=gxfxcxdxbxegedabagacad
-#export HISTCONTROL=ignoreboth
-alias ls="ls -GF"
+# Source global definitions
+#if [ -f /etc/bashrc ]; then
+#	. /etc/bashrc
+#fi
 
-export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
-alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
-alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/mvim "$@"'
+# Source bash_completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
-#GitPrompt
-if [ -f /opt/local/share/git/git-prompt.sh ]; then
-  . /opt/local/share/git/git-prompt.sh
+# User specific aliases and functions
+alias ls='ls -F'
+
+# Source git completion
+if [ -f ~/.git-completion.bash ]; then
+        . ~/.git-completion.bash
 fi
 
-PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
-
-# MacPorts Installer addition on 2015-09-07_at_13:45:39: adding an appropriate P
-#PATH variable for use with MacPorts.
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
-
-if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
-    . /opt/local/etc/profile.d/bash_completion.sh
+# Source git prompt
+if [ -f ~/.git-prompt.sh ]; then
+# リポジトリの状態によって表示が変わる設定を有効にする
+    GIT_PS1_SHOWDIRTYSTATE=1
+    . ~/.git-prompt.sh
+#    PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;35m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
+    PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;31m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
 fi
 
-#pyenv environment
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
-eval "$(pyenv init -)"
-
-#virtualenv environment
-eval "$(pyenv virtualenv-init -)"
-
+export PATH="/usr/local/opt/openssl/bin:$PATH"

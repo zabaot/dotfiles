@@ -22,7 +22,7 @@ elseif has('mac')
 	set columns=100      " 横幅
 	set lines=35         " 行数
 	set nowrapscan       " 検索をファイルの先頭へループしない
-	colorscheme wombat256
+	colorscheme molokai
 	set imdisable
 elseif has('xfontset')
 	" UNIX用 (xfontsetを使用)
