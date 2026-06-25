@@ -19,9 +19,18 @@ setopt correct
 # Emacs キーバインド
 bindkey -e
 
-# 補完
+# 高機能なワイルドカード展開（compinit のキャッシュ確認に glob 構文を使うため先に有効化）
+setopt extended_glob
+
+# 補完の初期化
 # -Uz: -U はエイリアス展開を抑制、-z は zsh スタイルのオートロード（公式推奨形式）
-autoload -Uz compinit; compinit
+# .zcompdump が 24 時間以内に生成されていればセキュリティチェックをスキップして高速起動
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-~}/.zcompdump(#qNmh+24) ]]; then
+    compinit      # キャッシュが古い（24 時間以上経過）場合は補完定義を再生成
+else
+    compinit -C   # キャッシュが新しければセキュリティチェックをスキップ
+fi
 
 # Shift-Tab で補完候補を逆順
 bindkey "^[[Z" reverse-menu-complete
@@ -34,9 +43,6 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 
 # 補完候補が複数あるとき自動で一覧表示
 setopt auto_menu
-
-# 高機能なワイルドカード展開
-setopt extended_glob
 
 # ディレクトリ名だけで cd
 setopt auto_cd

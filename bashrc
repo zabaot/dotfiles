@@ -40,21 +40,22 @@ export LANG=ja_JP.UTF-8
 
 # bash 補完
 if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
+    if [ -f /opt/homebrew/etc/profile.d/bash_completion.sh ]; then
+        # Homebrew bash-completion@2（bash 4.2 以降対応・Apple Silicon）
+        . /opt/homebrew/etc/profile.d/bash_completion.sh
+    elif [ -f /usr/share/bash-completion/bash_completion ]; then
+        # Ubuntu/Debian 標準インストール
         . /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
         . /etc/bash_completion
-    elif [ -f /usr/local/etc/bash_completion ]; then
-        . /usr/local/etc/bash_completion
     fi
 fi
 
 # git プロンプト（システムインストール済みのものを優先、なければスキップ）
 _git_prompt_candidates=(
+    /opt/homebrew/share/git-core/contrib/completion/git-prompt.sh
     /usr/lib/git-core/git-sh-prompt
     /usr/share/git-core/contrib/completion/git-prompt.sh
-    /usr/local/etc/bash_completion.d/git-prompt.sh
-    /opt/homebrew/etc/bash_completion.d/git-prompt.sh
     ~/.git-prompt.sh
 )
 for _f in "${_git_prompt_candidates[@]}"; do
