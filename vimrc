@@ -59,7 +59,14 @@ set hlsearch   " 検索結果をハイライト
 set incsearch  " 入力中にリアルタイムで検索（インクリメンタルサーチ）
 set ignorecase " 検索時に大文字・小文字を区別しない
 set smartcase  " 検索語に大文字が含まれるときだけ大文字・小文字を区別する
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l> " Ctrl+L でハイライトを消去
+
+" キーマップとは: 特定のキーを押したときに実行するコマンドを登録する設定
+"   nnoremap = ノーマルモード（文字入力していない状態）専用の安全なキー割り当て
+"   inoremap = 入力モード（文字を入力している状態）専用の安全なキー割り当て
+"   nmap     = ノーマルモードのキー割り当て（プラグインの <plug> 記法を使う場合のみ必要）
+"   <silent> = コマンド実行時にコマンドラインに内容を表示しない
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+      " Ctrl+L: 検索ハイライトを消去して画面を再描画する
 
 " Undo
 set undofile " セッションをまたいで undo 履歴をファイルに永続化
@@ -87,20 +94,35 @@ if has('termguicolors')
     set termguicolors " 24bitフルカラーを有効化（ターミナルが対応している場合のみ）
 endif
 
-" fzf キーマップ
-nnoremap <C-p> :Files<CR>   " Ctrl+P でファイル検索
-nnoremap <C-b> :Buffers<CR> " Ctrl+B で開いているバッファ一覧
+" fzf キーマップ（ノーマルモード）
+" fzf はファイル名をあいまい検索で絞り込めるツール。キーを押すと選択画面が開く
+nnoremap <C-p> :Files<CR>
+      " Ctrl+P: プロジェクト内のファイルをあいまい検索して開く（例: 「vim」と入力すれば vimrc が見つかる）
+nnoremap <C-b> :Buffers<CR>
+      " Ctrl+B: 現在 Vim で開いているファイル（バッファ）の一覧を表示して切り替える
 
-" LSP キーマップ
-nmap <silent> gd <plug>(lsp-definition) " gd で定義元にジャンプ
-nmap <silent> gr <plug>(lsp-references) " gr で参照一覧を表示
-nmap <silent> K  <plug>(lsp-hover)      " K でカーソル位置のドキュメントをホバー表示
-let g:lsp_diagnostics_echo_cursor = 1  " カーソル位置のエラー・警告をコマンドラインに表示
+" LSP キーマップ（ノーマルモード）
+" LSP はコード補完・定義ジャンプ・エラー表示を提供する仕組み。
+" nmap を使うのは <plug> がプラグイン内部の特殊記法で nnoremap では解釈されないため
+nmap <silent> gd <plug>(lsp-definition)
+      " gd: カーソル下の関数・変数・クラスが定義されているファイルの該当行にジャンプする
+nmap <silent> gr <plug>(lsp-references)
+      " gr: カーソル下のシンボルがコード内のどこで使われているかを一覧表示する
+nmap <silent> K  <plug>(lsp-hover)
+      " K: カーソル下のシンボルの型・説明をポップアップで表示する（Shift+K）
+let g:lsp_diagnostics_echo_cursor = 1
+      " カーソルを合わせたときにエラー・警告のメッセージをコマンドラインに表示する
 
-" asyncomplete キーマップ
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"                   " Tab で補完候補を次に進む
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"                 " Shift+Tab で補完候補を前に戻る
-inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"  " Enter で補完を確定
+" 補完キーマップ（入力モード）
+" asyncomplete は入力中に自動で補完候補をポップアップ表示するプラグイン。
+" <expr> を使うことで「補完ポップアップが表示されているかどうか」で動作を切り替えている
+" pumvisible() = 補完ポップアップが現在表示中なら 1、表示されていなければ 0 を返す関数
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+      " Tab: 補完候補が出ているときは次の候補へ進む。出ていないときは通常のタブ入力
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+      " Shift+Tab: 補完候補が出ているときは前の候補に戻る。出ていないときは通常の Shift+Tab
+inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+      " Enter: 補完候補が出ているときは選択中の候補を確定して閉じる。出ていないときは通常の改行
 
 " カラースキーム
 syntax on        " シンタックスハイライトを有効化
