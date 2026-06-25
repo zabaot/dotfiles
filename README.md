@@ -1,7 +1,10 @@
 # dotfiles
 
-Vim / Zsh / tmux / Bash の個人設定ファイル集。
+Vim / tmux / Bash / Zsh の個人設定ファイル集。
 **macOS (Apple Silicon)** と **Ubuntu Linux** の両環境で動作します。
+
+シェルはそれぞれの OS のデフォルトを使用します。
+macOS: zsh（zprezto）、Ubuntu: bash
 
 ## 動作確認環境
 
@@ -11,7 +14,8 @@ Vim / Zsh / tmux / Bash の個人設定ファイル集。
 | Ubuntu Linux | 26.04 LTS |
 | Vim | 9.x |
 | tmux | 3.x |
-| Zsh | 5.x |
+| Zsh | 5.x（macOS のみ） |
+| Bash | 5.x（Ubuntu のみ） |
 
 ---
 
@@ -20,10 +24,9 @@ Vim / Zsh / tmux / Bash の個人設定ファイル集。
 | ファイル | 説明 |
 | -------- | ---- |
 | `vimrc` | Vim の設定ファイル。vim-plug でプラグインを管理 |
-| `zshrc` | Zsh の設定ファイル。zprezto がない環境（Ubuntu など）向け |
 | `zpreztorc` | zprezto のモジュール・プロンプト・キーバインド設定（Mac 向け） |
 | `tmux.conf` | tmux の設定ファイル。Mac / Linux を自動判別 |
-| `bashrc` | Bash の設定ファイル。Zsh が使えない環境向け |
+| `bashrc` | Bash の設定ファイル（Ubuntu 向け） |
 | `install.sh` | シンボリックリンクの作成と vim-plug のインストールを自動化するスクリプト |
 | `LICENSE` | Apache License 2.0 |
 
@@ -48,8 +51,10 @@ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$H
 
 ```bash
 sudo apt update
-sudo apt install vim tmux git zsh
+sudo apt install vim tmux git ncurses-term
 ```
+
+> `ncurses-term` は tmux の `tmux-256color` ターミナルタイプに必要です。
 
 ---
 
@@ -75,13 +80,12 @@ cd ~/dotfiles
    - `.zshrc` と `.zprofile` は zprezto が管理するため変更しません
 5. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
-#### Ubuntu（zprezto なしの場合）
+#### Ubuntu（bash）
 
 1. `~/.vimrc` → `~/dotfiles/vimrc`
-2. `~/.zshrc` → `~/dotfiles/zshrc`
-3. `~/.tmux.conf` → `~/dotfiles/tmux.conf`
-4. `~/.bashrc` → `~/dotfiles/bashrc`
-5. vim-plug を自動インストール
+2. `~/.tmux.conf` → `~/dotfiles/tmux.conf`
+3. `~/.bashrc` → `~/dotfiles/bashrc`
+4. vim-plug を自動インストール
 
 > 既存のファイルは上書きされず、`.bak.YYYYMMDDHHMMSS` という名前でバックアップされます。
 

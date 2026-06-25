@@ -22,17 +22,11 @@ link vimrc     .vimrc
 link tmux.conf .tmux.conf
 link bashrc    .bashrc
 
-# --- zsh 設定: zprezto の有無で分岐 ---
+# --- zpreztorc: Mac（zprezto インストール済み）のみリンク ---
+# Ubuntu は bash をデフォルトシェルとして使うため zsh 設定は不要
 if [ -d "$HOME/.zprezto" ]; then
-    # zprezto がインストール済み（Mac 想定）
-    # .zshrc は zprezto が管理するためリンクしない
-    # zpreztorc だけ dotfiles のものに差し替える
     link zpreztorc .zpreztorc
     echo "Note: .zshrc is managed by zprezto, skipped."
-else
-    # zprezto なし（Ubuntu 等）
-    # dotfiles のスタンドアロン zshrc を使う
-    link zshrc .zshrc
 fi
 
 # --- vim-plug ---
@@ -46,9 +40,7 @@ fi
 echo ""
 echo "Done. Next steps:"
 echo "  1. Start Vim and run :PlugInstall"
+echo "  2. Restart your shell or run: source ~/.bashrc"
 if [ -d "$HOME/.zprezto" ]; then
-    echo "  2. Restart your shell or run: source ~/.zshrc"
-else
-    echo "  2. Restart your shell or run: source ~/.zshrc"
-    echo "  (Optional) Install zprezto: https://github.com/sorin-ionescu/prezto"
+    echo "     (zsh の場合: source ~/.zshrc)"
 fi
