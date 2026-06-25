@@ -1,11 +1,13 @@
-#
-# sorin テーマのラッパー。変更点は以下の 2 点のみ:
-#   1. ディレクトリパスを省略せず完全表示（sorin はデフォルトで短縮する）
-#   2. ディレクトリの色を cyan に変更（sorin のデフォルトは %F{4} blue）
-#
-# zprezto の sorin テーマ本体を直接呼び出すことで、
-# sorin へのアップデートが自動的に反映される。
-#
+# File     : prompt_mysorin_setup
+# Author   : Yasaka
+# Repo     : https://github.com/zabaot/dotfiles
+# License  : Apache License 2.0
+# Based on : https://github.com/sorin-ionescu/prezto (sorin prompt theme)
+# About    : sorin テーマのラッパー。変更点は以下の 2 点のみ:
+#              1. ディレクトリパスを省略せず完全表示（sorin はデフォルトで短縮する）
+#              2. ディレクトリの色を cyan に変更（sorin のデフォルトは %F{4} blue）
+#            zprezto の sorin テーマ本体を直接呼び出すため、
+#            sorin へのアップデートが自動的に反映される。
 
 function prompt_mysorin_precmd {
   setopt LOCAL_OPTIONS

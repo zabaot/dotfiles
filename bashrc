@@ -1,3 +1,9 @@
+# File    : bashrc
+# Author  : Yasaka
+# Repo    : https://github.com/zabaot/dotfiles
+# License : Apache License 2.0
+# About   : Ubuntu 向け bash の設定ファイル
+
 # インタラクティブシェルでなければ何もしない
 case $- in
     *i*) ;;

@@ -1,9 +1,9 @@
-#
-# Sets Prezto options.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+# File     : zpreztorc
+# Author   : Yasaka
+# Repo     : https://github.com/zabaot/dotfiles
+# License  : Apache License 2.0
+# Based on : https://github.com/sorin-ionescu/prezto (default zpreztorc)
+# About    : zprezto のモジュール・テーマ・キーバインド設定（macOS 向け）
 
 #
 # General

@@ -1,3 +1,9 @@
+" File    : vimrc
+" Author  : Yasaka
+" Repo    : https://github.com/zabaot/dotfiles
+" License : Apache License 2.0
+" About   : Vim 9.x の設定ファイル。vim-plug でプラグインを管理する
+
 set encoding=utf-8 " Vim内部で使う文字コードをUTF-8に設定
 
 " プラグイン管理: vim-plug（install.sh が初回セットアップ時に自動インストール）
