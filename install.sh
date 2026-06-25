@@ -17,12 +17,25 @@ link() {
 
 echo "=== dotfiles install ==="
 
-link vimrc   .vimrc
-link zshrc   .zshrc
+# --- 全環境共通 ---
+link vimrc     .vimrc
 link tmux.conf .tmux.conf
-link bashrc  .bashrc
+link bashrc    .bashrc
 
-# vim-plug
+# --- zsh 設定: zprezto の有無で分岐 ---
+if [ -d "$HOME/.zprezto" ]; then
+    # zprezto がインストール済み（Mac 想定）
+    # .zshrc は zprezto が管理するためリンクしない
+    # zpreztorc だけ dotfiles のものに差し替える
+    link zpreztorc .zpreztorc
+    echo "Note: .zshrc is managed by zprezto, skipped."
+else
+    # zprezto なし（Ubuntu 等）
+    # dotfiles のスタンドアロン zshrc を使う
+    link zshrc .zshrc
+fi
+
+# --- vim-plug ---
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
     echo "Installing vim-plug..."
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -33,4 +46,9 @@ fi
 echo ""
 echo "Done. Next steps:"
 echo "  1. Start Vim and run :PlugInstall"
-echo "  2. Restart your shell or run: source ~/.zshrc"
+if [ -d "$HOME/.zprezto" ]; then
+    echo "  2. Restart your shell or run: source ~/.zshrc"
+else
+    echo "  2. Restart your shell or run: source ~/.zshrc"
+    echo "  (Optional) Install zprezto: https://github.com/sorin-ionescu/prezto"
+fi
