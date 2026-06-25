@@ -1,4 +1,7 @@
-" vim-plug — 初回セットアップ時に install.sh が自動インストールする
+set nocompatible
+set encoding=utf-8
+
+" vim-plug — install.sh が初回セットアップ時に自動インストールする
 call plug#begin()
 
 Plug 'tomasr/molokai'
@@ -12,16 +15,12 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 call plug#end()
 
 " Encoding
-set encoding=utf-8
 set fileencoding=utf-8
-set termencoding=utf-8
-set fileformat=unix
+set fileformats=unix,dos,mac
 
 " Display
-set nocompatible
 set number
 set cursorline
-set cursorcolumn
 set ambiwidth=double
 set laststatus=2
 set statusline=%<%f\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=\ (%v,%l)/%L%8P
@@ -32,6 +31,11 @@ set helpheight=999
 set formatoptions-=c
 set list
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
+set signcolumn=yes
+
+" Split
+set splitbelow
+set splitright
 
 " Cursor movement
 set backspace=indent,eol,start
@@ -53,12 +57,31 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-set wrapscan
-set gdefault
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+" Undo
+set undofile
+if !isdirectory($HOME . '/.vim/undo')
+    call mkdir($HOME . '/.vim/undo', 'p')
+endif
+set undodir=~/.vim/undo
+
+" Completion
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+set updatetime=300
+
+" Command-line completion
+set wildmenu
+set wildmode=longest:full,full
 
 " Misc
 set hidden
+
+" True color
+if has('termguicolors')
+    set termguicolors
+endif
 
 " fzf
 nnoremap <C-p> :Files<CR>
@@ -70,19 +93,23 @@ nmap <silent> gr <plug>(lsp-references)
 nmap <silent> K  <plug>(lsp-hover)
 let g:lsp_diagnostics_echo_cursor = 1
 
-" Completion
+" asyncomplete
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
 
-" Colorscheme
+" Colorscheme — vim-plug インストール前はデフォルトにフォールバック
 syntax on
 set t_Co=256
-colorscheme molokai
-let g:molokai_original = 1
-let g:rehash256 = 1
 set background=dark
-highlight Normal       ctermbg=NONE
-highlight NonText      ctermbg=NONE
-highlight LineNr       ctermbg=NONE
-highlight CursorLineNr ctermbg=NONE
+try
+    colorscheme molokai
+    let g:molokai_original = 1
+    let g:rehash256 = 1
+    highlight Normal       ctermbg=NONE
+    highlight NonText      ctermbg=NONE
+    highlight LineNr       ctermbg=NONE
+    highlight CursorLineNr ctermbg=NONE
+catch
+    colorscheme desert
+endtry
