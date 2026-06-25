@@ -1,10 +1,16 @@
 # dotfiles
 
-Vim / tmux / Bash / Zsh の個人設定ファイル集。
-**macOS (Apple Silicon)** と **Ubuntu Linux** の両環境で動作します。
+macOS と Ubuntu Linux で同じ開発環境を素早く再現するための個人設定ファイル集です。
+Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマシンでも `./install.sh` 一発でセットアップが完了します。
 
-シェルはそれぞれの OS のデフォルトを使用します。
-macOS: zsh（zprezto）、Ubuntu: bash
+## 設計方針
+
+- **シェルは OS のデフォルトを使う**: macOS は zsh（zprezto で管理）、Ubuntu は bash
+- **フラット構成**: 設定ファイルをサブディレクトリに分けず、リポジトリ直下に並べる
+- **レガシー排除**: 非推奨ツールは使わない。常に最新バージョンを前提とする
+- **シンボリックリンク方式**: `install.sh` は設定ファイルをコピーせずシンボリックリンクを作成する。リポジトリ内のファイルを編集すれば即座に反映される
+
+---
 
 ## 動作確認環境
 
@@ -14,22 +20,22 @@ macOS: zsh（zprezto）、Ubuntu: bash
 | Ubuntu Linux | 26.04 LTS |
 | Vim | 9.x |
 | tmux | 3.x |
-| Zsh | 5.x（macOS のみ） |
+| Zsh | 5.9 以降（macOS のみ） |
 | Bash | 5.x（Ubuntu のみ） |
 
 ---
 
 ## ファイル構成
 
-| ファイル | 説明 |
-| -------- | ---- |
-| `vimrc` | Vim の設定ファイル。vim-plug でプラグインを管理 |
-| `zpreztorc` | zprezto のモジュール・プロンプト・キーバインド設定（Mac 向け） |
-| `prompt_mysorin_setup` | zsh プロンプトのカスタムテーマ。zpreztorc で `mysorin` として指定（Mac 向け） |
-| `tmux.conf` | tmux の設定ファイル。Mac / Linux を自動判別 |
-| `bashrc` | Bash の設定ファイル（Ubuntu 向け） |
-| `install.sh` | シンボリックリンクの作成と vim-plug のインストールを自動化するスクリプト |
-| `LICENSE` | Apache License 2.0 |
+| ファイル | 対象環境 | 説明 |
+| -------- | -------- | ---- |
+| `vimrc` | 共通 | Vim の設定。vim-plug でプラグインを管理 |
+| `tmux.conf` | 共通 | tmux の設定。Mac / Linux を自動判別 |
+| `zpreztorc` | Mac | zprezto のモジュール・プロンプト・キーバインド設定 |
+| `prompt_mysorin_setup` | Mac | zsh プロンプトのカスタムテーマ（zprezto の `sorin` テーマをベースに改変） |
+| `bashrc` | Ubuntu | Bash の設定 |
+| `install.sh` | 共通 | シンボリックリンクの作成と vim-plug の自動インストール |
+| `LICENSE` | — | Apache License 2.0 |
 
 ---
 
@@ -37,16 +43,29 @@ macOS: zsh（zprezto）、Ubuntu: bash
 
 ### Mac
 
-以下のツールが必要です。[Homebrew](https://brew.sh) でインストールできます。
+[Homebrew](https://brew.sh) がインストール済みであることを前提とします。
 
 ```zsh
-# Vim・tmux・Git のインストール
+# 必要ツールのインストール
 brew install vim tmux git
-
-# zprezto のインストール（zsh フレームワーク）
-# 公式手順: https://github.com/sorin-ionescu/prezto
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 ```
+
+次に、zsh フレームワーク [zprezto](https://github.com/sorin-ionescu/prezto) をインストールします。
+zprezto は `.zshrc`・`.zprofile` などを管理するフレームワークです。
+
+```zsh
+# zprezto のインストール（公式手順）
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+
+# zprezto が用意するデフォルトの設定ファイルをホームディレクトリにリンク
+setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
+```
+
+> この時点では `.zpreztorc` が zprezto のデフォルトのものになっています。
+> 後述の `install.sh` を実行すると、このリポジトリの `zpreztorc` に差し替えられます。
 
 ### Ubuntu
 
@@ -55,20 +74,20 @@ sudo apt update
 sudo apt install vim tmux git ncurses-term
 ```
 
-> `ncurses-term` は tmux の `tmux-256color` ターミナルタイプに必要です。
+> `ncurses-term` は tmux の `tmux-256color` ターミナルタイプの定義ファイルを含むパッケージです。
+> インストールしないと tmux 起動時に `unknown terminal: tmux-256color` エラーが発生します。
 
 ---
 
 ## セットアップ
 
-```zsh
+```bash
 git clone https://github.com/zabaot/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./install.sh
 ```
 
-> `./install.sh` はシェバン行 `#!/usr/bin/env bash` により、
-> zsh から実行しても自動的に bash で動作します。
+> `install.sh` のシェバン行は `#!/usr/bin/env bash` です。zsh から実行しても bash で動作します。
 
 ### install.sh が行うこと
 
@@ -79,7 +98,8 @@ cd ~/dotfiles
 3. `~/.bashrc` → `~/dotfiles/bashrc` へのシンボリックリンクを作成
 4. `~/.zpreztorc` → `~/dotfiles/zpreztorc` へのシンボリックリンクを作成
    - `.zshrc` と `.zprofile` は zprezto が管理するため変更しません
-5. vim-plug（Vim のプラグインマネージャー）を自動インストール
+5. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `~/dotfiles/prompt_mysorin_setup` へのシンボリックリンクを作成
+6. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 #### Ubuntu（bash）
 
@@ -94,37 +114,183 @@ cd ~/dotfiles
 
 `install.sh` 実行後、Vim を起動して以下のコマンドを実行してください。
 
-```bash
-vim +PlugInstall +qall
+```vim
+:PlugInstall
 ```
+
+全プラグインのダウンロードと初期セットアップが行われます。
 
 ---
 
-## Vim の主な機能・キー操作
+## Vim の設定詳細
 
 ### プラグイン一覧
 
 | プラグイン | 用途 |
 | ---------- | ---- |
-| [tomasr/molokai](https://github.com/tomasr/molokai) | カラースキーム |
+| [tomasr/molokai](https://github.com/tomasr/molokai) | ダークカラースキーム |
 | [junegunn/fzf](https://github.com/junegunn/fzf) + [fzf.vim](https://github.com/junegunn/fzf.vim) | ファイル・バッファのあいまい検索 |
 | [prabirshrestha/vim-lsp](https://github.com/prabirshrestha/vim-lsp) | LSP クライアント（コード補完・定義ジャンプ・エラー表示） |
 | [mattn/vim-lsp-settings](https://github.com/mattn/vim-lsp-settings) | 言語サーバーの自動セットアップ |
-| [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) | 非同期補完エンジン |
+| [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) + [asyncomplete-lsp.vim](https://github.com/prabirshrestha/asyncomplete-lsp.vim) | 非同期補完エンジン（LSP と接続） |
+
+### LSP（Language Server Protocol）について
+
+LSP はコード補完・定義ジャンプ・エラー表示を提供する仕組みです。
+`vim-lsp-settings` が言語サーバーの自動インストールを担当しており、対応ファイルを開くと次のメッセージが表示されます。
+
+```text
+Please do :LspInstallServer to enable Language Server <サーバー名>
+```
+
+その場で `:LspInstallServer` を実行すると、各言語のサーバーが自動でインストールされます。
+インストール不要の言語は何もしなくて構いません。
+
+対応言語の一覧は [vim-lsp-settings の README](https://github.com/mattn/vim-lsp-settings) を参照してください。
 
 ### キー操作一覧
 
 | キー | モード | 動作 |
 | ---- | ------ | ---- |
-| `Ctrl+P` | ノーマル | プロジェクト内のファイルをあいまい検索して開く |
-| `Ctrl+B` | ノーマル | 開いているバッファ（ファイル）の一覧を表示 |
-| `gd` | ノーマル | カーソル下のシンボルの定義元へジャンプ |
-| `gr` | ノーマル | カーソル下のシンボルの参照箇所を一覧表示 |
-| `K` | ノーマル | カーソル下のシンボルのドキュメントをポップアップ表示 |
+| `Ctrl+P` | ノーマル | プロジェクト内のファイルをあいまい検索して開く（fzf） |
+| `Ctrl+B` | ノーマル | 開いているバッファ（ファイル）の一覧を表示（fzf） |
+| `gd` | ノーマル | カーソル下のシンボルの定義元へジャンプ（LSP） |
+| `gr` | ノーマル | カーソル下のシンボルの参照箇所を一覧表示（LSP） |
+| `K` | ノーマル | カーソル下のシンボルのドキュメントをポップアップ表示（LSP） |
 | `Tab` | 入力 | 補完候補を次へ進む（候補がないときは通常のタブ） |
 | `Shift+Tab` | 入力 | 補完候補を前へ戻る |
 | `Enter` | 入力 | 補完候補を確定する（候補がないときは通常の改行） |
 | `Ctrl+L` | ノーマル | 検索ハイライトを消去して画面を再描画 |
+
+---
+
+## tmux の設定詳細
+
+### 主な設定内容
+
+| 設定 | 値 | 説明 |
+| ---- | -- | ---- |
+| `default-terminal` | `tmux-256color` | 24bit カラー対応のターミナルタイプ（tmux 3.x 推奨） |
+| `escape-time` | 10ms | Esc キーの遅延を短縮（デフォルト 500ms だと Vim で誤動作） |
+| `focus-events` | on | Vim の `autoread` を tmux 内でも正しく動作させる |
+| `history-limit` | 50000 行 | スクロールバックの上限（デフォルト 2000 行から拡大） |
+| `mouse` | on | マウスでのスクロール・ペイン選択を有効化 |
+| `allow-rename` | off | コマンド実行時にウィンドウ名が自動変更されるのを防ぐ |
+
+ステータスバーの右側にはホスト名・ロードアベレージ・時刻を表示します（Mac は `sysctl`、Linux は `/proc/loadavg` を参照）。
+
+### 基本操作
+
+tmux の操作はすべて **プレフィックスキー `Ctrl+B`** を押してから行います。
+
+| 操作 | キー |
+| ---- | ---- |
+| 新しいウィンドウを開く | `Ctrl+B` → `c` |
+| 次のウィンドウへ移動 | `Ctrl+B` → `n` |
+| 前のウィンドウへ移動 | `Ctrl+B` → `p` |
+| ウィンドウ番号で移動 | `Ctrl+B` → `0`〜`9` |
+| 画面を左右に分割 | `Ctrl+B` → `%` |
+| 画面を上下に分割 | `Ctrl+B` → `"` |
+| 分割ペイン間を移動 | `Ctrl+B` → 矢印キー |
+| セッションをデタッチ | `Ctrl+B` → `d` |
+| セッション一覧を表示 | `tmux ls` |
+| セッションに再接続 | `tmux attach` |
+
+---
+
+## シェルの設定詳細
+
+### macOS — zsh + zprezto
+
+[zprezto](https://github.com/sorin-ionescu/prezto) は zsh のフレームワークです。
+モジュールを組み合わせることで補完・シンタックスハイライト・履歴検索などの機能を提供します。
+
+#### 有効にしているモジュール
+
+| モジュール | 提供する機能 |
+| ---------- | ------------ |
+| `environment` | zsh の基本オプション設定 |
+| `terminal` | ターミナルのウィンドウ・タブタイトル設定 |
+| `editor` | キーバインド設定（Emacs モード） |
+| `history` | コマンド履歴の設定（重複排除・共有など） |
+| `directory` | ディレクトリ移動の拡張（`cd` の履歴管理など） |
+| `spectrum` | シェルスクリプト用の色変数を定義 |
+| `utility` | `ls`・`grep` のカラー化などの便利エイリアス |
+| `completion` | Tab 補完の有効化・スタイル設定 |
+| `git` | git コマンドのエイリアスと情報取得関数 |
+| `syntax-highlighting` | コマンド入力中にリアルタイムでシンタックスハイライト |
+| `autosuggestions` | 過去のコマンド履歴から入力候補をグレーで表示（→ キーで確定） |
+| `history-substring-search` | ↑↓ キーで入力中の文字列を含む履歴を検索 |
+| `prompt` | プロンプトテーマを読み込む（`mysorin` テーマを使用） |
+
+#### キーバインド
+
+Emacs モードを使用しています。主なショートカット：
+
+| キー | 動作 |
+| ---- | ---- |
+| `Ctrl+A` | 行頭へ移動 |
+| `Ctrl+E` | 行末へ移動 |
+| `Ctrl+R` | コマンド履歴をインクリメンタル検索 |
+| `Ctrl+U` | カーソル前の文字をすべて削除 |
+| `↑` / `↓` | 入力中の文字列を含む履歴を検索（history-substring-search） |
+
+#### mysorin プロンプトテーマ
+
+zprezto の `sorin` テーマをベースにカスタマイズしたテーマです。
+カレントディレクトリのパスを短縮せず完全表示し、右プロンプトに git のブランチ・変更状態を表示します。
+
+---
+
+### Ubuntu — bash
+
+Ubuntu の標準シェル（bash）をそのまま使います。
+
+#### bash の主な設定内容
+
+| 設定 | 内容 |
+| ---- | ---- |
+| `HISTCONTROL=ignoreboth` | 重複コマンドと先頭スペース付きコマンドを履歴に残さない |
+| `HISTSIZE` / `HISTFILESIZE` | 履歴を 100,000 件保存 |
+| `PROMPT_COMMAND` | コマンド実行のたびに履歴をファイルに書き込み・読み込み（複数セッション間で共有） |
+| `shopt -s histappend` | シェル終了時に履歴を追記（上書きしない） |
+| `shopt -s checkwinsize` | コマンド実行後にウィンドウサイズを再確認（ターミナルリサイズへの対応） |
+
+bash 補完は `bash-completion@2`（Homebrew）または `/usr/share/bash-completion`（Ubuntu）を自動検出して読み込みます。
+
+git プロンプトは `/opt/homebrew/share/git-core/contrib/completion/git-prompt.sh`（Mac）または `/usr/lib/git-core/git-sh-prompt`（Ubuntu）などを自動検出します。見つかった場合、プロンプトにブランチ名と変更状態（`*`）が表示されます。
+
+---
+
+## 設定のカスタマイズ
+
+設定ファイルはシンボリックリンクなので、リポジトリ内のファイルを直接編集すれば即座に反映されます。
+
+```bash
+# 例: Vim の設定を変更する
+vim ~/dotfiles/vimrc
+# → 保存した瞬間から次回の Vim 起動に反映される
+```
+
+変更をバージョン管理する場合：
+
+```bash
+cd ~/dotfiles
+git add vimrc
+git commit -m "vimrc: ..."
+git push
+```
+
+---
+
+## 設定の更新（別マシンへの反映）
+
+```bash
+cd ~/dotfiles
+git pull
+```
+
+シンボリックリンクはそのままなので、`git pull` だけで全設定が最新になります。
 
 ---
 
