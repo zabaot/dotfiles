@@ -23,8 +23,8 @@ set number           " 行番号を表示
 set cursorline       " カーソル行をハイライト
 set ambiwidth=double " 全角文字の幅を2として扱う（日本語表示のずれを防ぐ）
 set laststatus=2     " ステータスラインを常に表示
+" ステータスライン: ファイル名・修正状態・文字コード・改行コード・行/列位置
 set statusline=%<%f\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=\ (%v,%l)/%L%8P
-                     " ステータスライン: ファイル名・修正状態・文字コード・改行コード・行/列位置
 set cmdheight=2      " コマンドラインの表示行数（LSPメッセージが1行に収まらない場合に備える）
 set showmatch        " 対応する括弧をハイライト
 set matchtime=3      " 括弧ハイライトの表示時間（×0.1秒）
@@ -70,12 +70,14 @@ set undodir=~/.vim/undo " undo ファイルの保存場所
 
 " 補完
 set completeopt=menuone,noinsert,noselect " 候補が1つでもメニュー表示、自動挿入・自動選択しない
+set pumheight=10                          " 補完ポップアップの最大表示行数
 set shortmess+=c                          " 「x/y マッチ」などの補完メッセージを非表示
 set updatetime=300 " CursorHold イベントの発火間隔（ms）、LSP診断の反応速度に影響（デフォルト4000）
 
 " コマンドライン補完
 set wildmenu                   " 補完候補をメニュー表示
 set wildmode=longest:full,full " 1回目Tab: 共通部分まで補完、2回目Tab: 候補を順に選択
+set wildoptions=pum            " 補完候補をポップアップウィンドウで表示（Vim 8.1.2080以降）
 
 " その他
 set hidden " 未保存のバッファを隠しバッファとして残す（保存せず別ファイルへ移動できる）
