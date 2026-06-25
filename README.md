@@ -25,6 +25,7 @@ macOS: zsh（zprezto）、Ubuntu: bash
 | -------- | ---- |
 | `vimrc` | Vim の設定ファイル。vim-plug でプラグインを管理 |
 | `zpreztorc` | zprezto のモジュール・プロンプト・キーバインド設定（Mac 向け） |
+| `prompt_mysorin_setup` | zsh プロンプトのカスタムテーマ。zpreztorc で `mysorin` として指定（Mac 向け） |
 | `tmux.conf` | tmux の設定ファイル。Mac / Linux を自動判別 |
 | `bashrc` | Bash の設定ファイル（Ubuntu 向け） |
 | `install.sh` | シンボリックリンクの作成と vim-plug のインストールを自動化するスクリプト |

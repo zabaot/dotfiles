@@ -22,10 +22,12 @@ link vimrc     .vimrc
 link tmux.conf .tmux.conf
 link bashrc    .bashrc
 
-# --- zpreztorc: Mac（zprezto インストール済み）のみリンク ---
+# --- zprezto 設定: Mac（zprezto インストール済み）のみリンク ---
 # Ubuntu は bash をデフォルトシェルとして使うため zsh 設定は不要
 if [ -d "$HOME/.zprezto" ]; then
     link zpreztorc .zpreztorc
+    # mysorin プロンプトテーマを zprezto のテーマディレクトリに配置
+    link prompt_mysorin_setup .zprezto/modules/prompt/functions/prompt_mysorin_setup
     echo "Note: .zshrc is managed by zprezto, skipped."
 fi
 
