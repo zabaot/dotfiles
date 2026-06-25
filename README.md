@@ -91,15 +91,14 @@ cd ~/dotfiles
 
 ### install.sh が行うこと
 
-#### Mac（zprezto インストール済みの場合）
+#### Mac（zsh + zprezto）
 
 1. `~/.vimrc` → `~/dotfiles/vimrc` へのシンボリックリンクを作成
 2. `~/.tmux.conf` → `~/dotfiles/tmux.conf` へのシンボリックリンクを作成
-3. `~/.bashrc` → `~/dotfiles/bashrc` へのシンボリックリンクを作成
-4. `~/.zpreztorc` → `~/dotfiles/zpreztorc` へのシンボリックリンクを作成
+3. `~/.zpreztorc` → `~/dotfiles/zpreztorc` へのシンボリックリンクを作成
    - `.zshrc` と `.zprofile` は zprezto が管理するため変更しません
-5. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `~/dotfiles/prompt_mysorin_setup` へのシンボリックリンクを作成
-6. vim-plug（Vim のプラグインマネージャー）を自動インストール
+4. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `~/dotfiles/prompt_mysorin_setup` へのシンボリックリンクを作成
+5. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 #### Ubuntu（bash）
 

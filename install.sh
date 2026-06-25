@@ -20,15 +20,17 @@ echo "=== dotfiles install ==="
 # --- 全環境共通 ---
 link vimrc     .vimrc
 link tmux.conf .tmux.conf
-link bashrc    .bashrc
 
-# --- zprezto 設定: Mac（zprezto インストール済み）のみリンク ---
-# Ubuntu は bash をデフォルトシェルとして使うため zsh 設定は不要
+# --- シェル設定: OS のデフォルトシェルに応じて分岐 ---
 if [ -d "$HOME/.zprezto" ]; then
+    # Mac: zsh + zprezto
+    # .zshrc は zprezto が管理するためリンクしない
     link zpreztorc .zpreztorc
-    # mysorin プロンプトテーマを zprezto のテーマディレクトリに配置
     link prompt_mysorin_setup .zprezto/modules/prompt/functions/prompt_mysorin_setup
     echo "Note: .zshrc is managed by zprezto, skipped."
+else
+    # Ubuntu: bash
+    link bashrc .bashrc
 fi
 
 # --- vim-plug ---
@@ -42,7 +44,8 @@ fi
 echo ""
 echo "Done. Next steps:"
 echo "  1. Start Vim and run :PlugInstall"
-echo "  2. Restart your shell or run: source ~/.bashrc"
 if [ -d "$HOME/.zprezto" ]; then
-    echo "     (zsh の場合: source ~/.zshrc)"
+    echo "  2. Restart your shell or run: source ~/.zshrc"
+else
+    echo "  2. Restart your shell or run: source ~/.bashrc"
 fi
