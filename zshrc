@@ -4,9 +4,6 @@ export LANG=ja_JP.UTF-8
 # エディタ
 export EDITOR=vim
 
-# PCRE 互換の正規表現
-setopt re_match_pcre
-
 # ビープ音を消す
 setopt nolistbeep
 
@@ -23,7 +20,8 @@ setopt correct
 bindkey -e
 
 # 補完
-autoload -U compinit; compinit
+# -Uz: -U はエイリアス展開を抑制、-z は zsh スタイルのオートロード（公式推奨形式）
+autoload -Uz compinit; compinit
 
 # Shift-Tab で補完候補を逆順
 bindkey "^[[Z" reverse-menu-complete
