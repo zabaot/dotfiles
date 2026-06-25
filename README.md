@@ -81,8 +81,10 @@ sudo apt install vim tmux git ncurses-term
 
 ## セットアップ
 
+clone 先のディレクトリはどこでも構いません。`install.sh` は自分のある場所を基準に動作します。
+
 ```bash
-git clone https://github.com/zabaot/dotfiles.git ~/dotfiles
+git clone https://github.com/zabaot/dotfiles.git ~/dotfiles  # 任意のパスに変更可
 cd ~/dotfiles
 ./install.sh
 ```
@@ -93,20 +95,21 @@ cd ~/dotfiles
 
 #### Mac（zsh + zprezto）
 
-1. `~/.vimrc` → `~/dotfiles/vimrc` へのシンボリックリンクを作成
-2. `~/.tmux.conf` → `~/dotfiles/tmux.conf` へのシンボリックリンクを作成
-3. `~/.zpreztorc` → `~/dotfiles/zpreztorc` へのシンボリックリンクを作成
+1. `~/.vimrc` → `<dotfiles>/vimrc` へのシンボリックリンクを作成
+2. `~/.tmux.conf` → `<dotfiles>/tmux.conf` へのシンボリックリンクを作成
+3. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
    - `.zshrc` と `.zprofile` は zprezto が管理するため変更しません
-4. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `~/dotfiles/prompt_mysorin_setup` へのシンボリックリンクを作成
+4. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
 5. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 #### Ubuntu（bash）
 
-1. `~/.vimrc` → `~/dotfiles/vimrc`
-2. `~/.tmux.conf` → `~/dotfiles/tmux.conf`
-3. `~/.bashrc` → `~/dotfiles/bashrc`
+1. `~/.vimrc` → `<dotfiles>/vimrc`
+2. `~/.tmux.conf` → `<dotfiles>/tmux.conf`
+3. `~/.bashrc` → `<dotfiles>/bashrc`
 4. vim-plug を自動インストール
 
+> `<dotfiles>` は clone 先の実際のパスに読み替えてください。
 > 既存のファイルは上書きされず、`.bak.YYYYMMDDHHMMSS` という名前でバックアップされます。
 
 ### Vim プラグインのインストール
