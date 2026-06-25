@@ -7,24 +7,38 @@ zsh / vim / tmux / bash の設定ファイル。Mac (Apple Silicon) と Ubuntu L
 | ファイル | 用途 |
 | ------- | ---- |
 | `vimrc` | Vim 設定（vim-plug でプラグイン管理） |
-| `zshrc` | Zsh 設定 |
+| `zshrc` | Zsh 設定（zprezto がない Ubuntu 向け） |
+| `zpreztorc` | zprezto モジュール・プロンプト・キーバインド設定（Mac 向け） |
 | `tmux.conf` | tmux 設定（Mac / Linux 自動判別） |
 | `bashrc` | Bash 設定（zsh が使えない環境向け） |
 | `install.sh` | シンボリックリンク作成 + vim-plug インストール |
 
 ## セットアップ
 
-```bash
+```zsh
 git clone <このリポジトリのURL> ~/dotfiles
 cd ~/dotfiles
-bash install.sh
+./install.sh
 ```
+
+> `./install.sh` はシェバン行 `#!/usr/bin/env bash` により、
+> zsh から実行しても自動的に bash で動作します。
 
 ### install.sh が行うこと
 
-1. `~/.vimrc`, `~/.zshrc`, `~/.tmux.conf`, `~/.bashrc` → リポジトリ内ファイルへのシンボリックリンクを作成
-   - 既存ファイルは `.bak.YYYYMMDDHHMMSS` にバックアップ
-2. vim-plug (`~/.vim/autoload/plug.vim`) を自動インストール
+### Mac（zprezto あり）
+
+1. `~/.vimrc`, `~/.tmux.conf`, `~/.bashrc` → シンボリックリンクを作成
+2. `~/.zpreztorc` → dotfiles の `zpreztorc` へのシンボリックリンクを作成
+   - `.zshrc` / `.zprofile` は zprezto が管理するため変更しない
+3. vim-plug を自動インストール
+
+### Ubuntu（zprezto なし）
+
+1. `~/.vimrc`, `~/.zshrc`, `~/.tmux.conf`, `~/.bashrc` → シンボリックリンクを作成
+2. vim-plug を自動インストール
+
+既存ファイルは `.bak.YYYYMMDDHHMMSS` にバックアップされます。
 
 ### Vim プラグインのインストール
 
