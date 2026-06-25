@@ -177,7 +177,7 @@ Please do :LspInstallServer to enable Language Server <サーバー名>
 | `focus-events` | on | Vim の `autoread` を tmux 内でも正しく動作させる |
 | `history-limit` | 50000 行 | スクロールバックの上限（デフォルト 2000 行から拡大） |
 | `mouse` | on | マウスでのスクロール・ペイン選択を有効化 |
-| `allow-rename` | off | コマンド実行時にウィンドウ名が自動変更されるのを防ぐ |
+| `automatic-rename` | off | コマンド実行時にウィンドウ名が自動変更されるのを防ぐ |
 
 ステータスバーの右側にはホスト名・ロードアベレージ・時刻を表示します（Mac は `sysctl`、Linux は `/proc/loadavg` を参照）。
 
@@ -293,6 +293,57 @@ git pull
 ```
 
 シンボリックリンクはそのままなので、`git pull` だけで全設定が最新になります。
+
+---
+
+## メンテナンス
+
+### zprezto を更新したときの確認手順（Mac のみ）
+
+#### なぜ確認が必要か
+
+`zpreztorc` はもともと zprezto が提供するデフォルト設定をベースに作られています。
+zprezto を更新すると、zprezto 側のデフォルト `zpreztorc` に新しいオプションや変更が加わることがあります。
+しかし dotfiles の `zpreztorc` は独立したファイルなので、**zprezto を更新しても dotfiles 側には自動反映されません**。
+放置すると「zprezto が対応した新機能を知らずに使えていない」状態になります。
+
+#### いつ確認するか
+
+zprezto を更新したとき（以下のコマンドを実行したとき）に確認してください。
+
+```zsh
+git -C ~/.zprezto pull --recurse-submodules
+```
+
+#### 確認手順
+
+```zsh
+# zprezto のデフォルト zpreztorc と dotfiles の zpreztorc を比較する
+diff ~/.zprezto/runcoms/zpreztorc ~/dotfiles/zpreztorc
+```
+
+差分を読んで、zprezto 側に追加された設定のうち取り込みたいものがあれば
+`~/dotfiles/zpreztorc` に手動で反映してコミットします。
+
+#### 差分の読み方
+
+`diff` の出力は以下のルールで読みます。
+
+```diff
+< （左側）= zprezto のデフォルト側にある行
+> （右側）= dotfiles 側にある行
+```
+
+取り込むべき差分の典型例：
+
+- zprezto 側に新しいモジュールのコメント例が追加されていた → 参考として確認
+- dotfiles 側にあって zprezto 側にない行 → 自分のカスタマイズなので変更不要
+
+#### 実際の発生頻度
+
+zprezto の `zpreztorc` が変更されることは稀です。
+更新のたびに毎回 diff をとる必要はなく、**動作がおかしいと感じたときや
+zprezto のメジャーアップデートがあったとき**に確認する程度で十分です。
 
 ---
 
