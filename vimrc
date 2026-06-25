@@ -104,10 +104,10 @@ inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"  " E
 syntax on        " シンタックスハイライトを有効化
 set t_Co=256     " 256色対応
 set background=dark
+let g:molokai_original = 1 " オリジナルの molokai 配色を使用（設定はcolorscheme呼び出し前に必要）
+let g:rehash256 = 1        " 256色モードで近似色を使用
 try
-    colorscheme molokai        " molokai カラースキームを適用
-    let g:molokai_original = 1 " オリジナルの molokai 配色を使用
-    let g:rehash256 = 1        " 256色モードで近似色を使用
+    colorscheme molokai " molokai カラースキームを適用
     highlight Normal       ctermbg=NONE " 背景をターミナルのデフォルト色に透過
     highlight NonText      ctermbg=NONE
     highlight LineNr       ctermbg=NONE
