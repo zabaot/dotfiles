@@ -63,10 +63,29 @@ bindkey "^R" history-incremental-search-backward
 
 # 色設定
 autoload -Uz colors; colors
+
+# LSCOLORS: macOS の BSD ls が参照する色設定（Linux では無視される）
 export LSCOLORS=Exfxcxdxbxegedabagacad
+# LS_COLORS: Linux の GNU ls・補完候補が参照する色設定（macOS では補完候補の色に使われる）
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
+# CLICOLOR: macOS の BSD ls でカラー表示を有効にする（Linux では無視される）
 export CLICOLOR=true
+
+# ls・grep のカラー設定（BSD ls と GNU ls でオプションが異なるため OS で分岐）
+case "$(uname)" in
+    Darwin)
+        # macOS: CLICOLOR=true だけで色が付くためエイリアス不要。-F で種別記号を付加
+        alias ls='ls -F'
+        ;;
+    Linux)
+        # Linux: GNU ls は --color=auto を明示しないとカラー表示されない
+        alias ls='ls --color=auto'
+        alias grep='grep --color=auto'
+        ;;
+esac
+
+# 補完候補の色を LS_COLORS に合わせる（Mac・Linux 共通）
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # プロンプト（vcs_info でブランチ表示）
