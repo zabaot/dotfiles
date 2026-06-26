@@ -126,21 +126,13 @@ fi
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
-# git ブランチ・変更状態付きプロンプト（git-prompt.sh がある場合のみ有効）
+# git ブランチ・変更状態付きプロンプト（apt install git で自動的に配置される）
 # 見つからない場合は上の Ubuntu デフォルト PS1 をそのまま使用
-for _f in \
-    /usr/lib/git-core/git-sh-prompt \
-    /usr/share/git-core/contrib/completion/git-prompt.sh \
-    ~/.git-prompt.sh
-do
-    if [ -f "$_f" ]; then
-        GIT_PS1_SHOWDIRTYSTATE=1
-        . "$_f"
-        PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;31m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
-        break
-    fi
-done
-unset _f
+if [ -f /usr/lib/git-core/git-sh-prompt ]; then
+    GIT_PS1_SHOWDIRTYSTATE=1
+    . /usr/lib/git-core/git-sh-prompt
+    PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;31m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
+fi
 
 # 複数ターミナルセッション間でコマンド履歴をリアルタイムに共有する
 export PROMPT_COMMAND='history -a; history -r'
