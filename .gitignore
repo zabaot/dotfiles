@@ -1,3 +1,13 @@
+# File    : .gitignore
+# Author  : Yasaka
+# Repo    : https://github.com/zabaot/dotfiles
+# License : Apache License 2.0
+# About   : dotfiles リポジトリで追跡不要なファイルを除外する
+
+# macOS が Finder でフォルダを開いたときに自動生成するメタデータファイル
 .DS_Store
+
+# Vim がファイル編集中に作成するスワップファイル（クラッシュ時の復元用）
+# リポジトリ内のファイルを Vim で編集すると生成されることがある
 *.swp
 *.swo
