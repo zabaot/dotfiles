@@ -31,6 +31,7 @@ Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマ
 | -------- | -------- | ---- |
 | `vimrc` | 共通 | Vim の設定。vim-plug でプラグインを管理 |
 | `tmux.conf` | 共通 | tmux の設定。Mac / Linux を自動判別 |
+| `zshrc` | Mac | Zsh の個人設定（ls カラーを Ubuntu 標準に合わせるなど） |
 | `zpreztorc` | Mac | zprezto のモジュール・プロンプト・キーバインド設定 |
 | `prompt_mysorin_setup` | Mac | zsh プロンプトのカスタムテーマ（zprezto の `sorin` テーマをベースに改変） |
 | `bashrc` | Ubuntu | Bash の設定 |
@@ -48,6 +49,11 @@ Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマ
 ```zsh
 # 必要ツールのインストール
 brew install vim tmux git
+
+# GNU coreutils のインストール（ls のカラー表示を Ubuntu 標準に合わせるために必要）
+# gls（GNU ls）と gdircolors が含まれる
+# インストール後は ls コマンドが自動的に gls に切り替わり、Ubuntu と同じ色表示になる
+brew install coreutils
 ```
 
 次に、zsh フレームワーク [zprezto](https://github.com/sorin-ionescu/prezto) をインストールします。
@@ -97,10 +103,11 @@ cd ~/dotfiles
 
 1. `~/.vimrc` → `<dotfiles>/vimrc` へのシンボリックリンクを作成
 2. `~/.tmux.conf` → `<dotfiles>/tmux.conf` へのシンボリックリンクを作成
-3. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
-   - `.zshrc` と `.zprofile` は zprezto が管理するため変更しません
-4. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
-5. vim-plug（Vim のプラグインマネージャー）を自動インストール
+3. `~/.zshrc` → `<dotfiles>/zshrc` へのシンボリックリンクを作成
+   - zprezto の初期化と ls カラー設定を含む（内部で zprezto の `init.zsh` を source している）
+4. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
+5. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
+6. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 #### Ubuntu（bash）
 
@@ -236,6 +243,15 @@ Emacs モードを使用しています。主なショートカット：
 | `Ctrl+R` | コマンド履歴をインクリメンタル検索 |
 | `Ctrl+U` | カーソル前の文字をすべて削除 |
 | `↑` / `↓` | 入力中の文字列を含む履歴を検索（history-substring-search） |
+
+#### ls カラー設定（Ubuntu 標準との統一）
+
+macOS の標準 `ls` は BSD 実装で、Ubuntu の GNU `ls` とカラー表示の仕組みが異なります。
+`brew install coreutils` で GNU `ls`（`gls`）をインストールすると、`zshrc` の設定により `gdircolors -b` で `LS_COLORS` を設定し、Ubuntu と同じカラー表示になります。
+
+> **注意**: zprezto の git モジュールが `gls` を `git log` のエイリアスとして使っています。
+> そのため `zshrc` では `gls` のエイリアスを使わず `/opt/homebrew/bin/gls` のフルパスを直接指定しています。
+> `coreutils` をインストールしていない場合は、ls のカラー設定のみ Ubuntu と異なります（他の機能には影響しません）。
 
 #### mysorin プロンプトテーマ
 
