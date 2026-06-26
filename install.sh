@@ -24,10 +24,9 @@ link tmux.conf .tmux.conf
 # --- シェル設定: OS のデフォルトシェルに応じて分岐 ---
 if [ -d "$HOME/.zprezto" ]; then
     # Mac: zsh + zprezto
-    # .zshrc は zprezto が管理するためリンクしない
+    link zshrc     .zshrc
     link zpreztorc .zpreztorc
     link prompt_mysorin_setup .zprezto/modules/prompt/functions/prompt_mysorin_setup
-    echo "Note: .zshrc is managed by zprezto, skipped."
 else
     # Ubuntu: bash
     link bashrc .bashrc
