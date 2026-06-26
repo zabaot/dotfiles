@@ -1,10 +1,10 @@
 # File    : bashrc
-# Author  : Yasaka
+# Author  : Yasaka（個人設定部分）
 # Repo    : https://github.com/zabaot/dotfiles
-# License : Apache License 2.0
-# About   : Ubuntu 向け bash の設定ファイル
-#           Ubuntu 26.04 LTS のデフォルト ~/.bashrc をベースに個人設定を追加
-#           [個人設定] と記載のある箇所がデフォルトからの変更・追加
+# License : Apache License 2.0（[個人設定] と記載した箇所に適用）
+# Ref     : Ubuntu 26.04 LTS /etc/skel/.bashrc（bash パッケージ、GPL v3）
+# About   : Ubuntu 26.04 LTS のデフォルト ~/.bashrc をベースに個人設定を追加したファイル。
+#           標準部分は Ubuntu のデフォルトに由来し、[個人設定] と記載した箇所が独自の追加・変更。
 
 # インタラクティブシェルでなければ何もしない
 case $- in
