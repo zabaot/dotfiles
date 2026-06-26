@@ -1,96 +1,146 @@
-# インタラクティブシェルでなければ何もしない
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# ─── 履歴 ────────────────────────────────────────────────────────────────────
-# 重複コマンドと先頭スペース付きコマンドを履歴に残さない
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
 HISTCONTROL=ignoreboth
-# シェル終了時に履歴ファイルを上書きせず追記する（複数セッションで履歴を保全）
+
+# append to the history file, don't overwrite it
 shopt -s histappend
-# 保存件数 [個人設定: デフォルト 1000/2000 より多く保存]
-HISTSIZE=100000
-HISTFILESIZE=200000
 
-# ─── シェルオプション ─────────────────────────────────────────────────────────
-# コマンド実行後にターミナルのウィンドウサイズ（LINES・COLUMNS）を再確認する
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=100000      # [個人設定] デフォルト 1000 より多く保存
+HISTFILESIZE=200000  # [個人設定] デフォルト 2000 より多く保存
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-# ** を再帰的なワイルドカードとして使えるようにする（bash 4.0 以降）
-# 例: ls **/*.py → サブディレクトリも含めて全 .py ファイルを列挙
-# [個人設定: Ubuntu デフォルトはコメントアウト。bash 5.x では有効化する]
-shopt -s globstar
 
-# ─── less 拡張 ────────────────────────────────────────────────────────────────
-# 非テキストファイル（zip・PDF など）を less で開けるようにする
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar  # [個人設定] Ubuntu デフォルトはコメントアウト
+
+# make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# ─── カラー設定・エイリアス ───────────────────────────────────────────────────
-# dircolors で ls の色設定を読み込み、ls・grep をカラー表示にする
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
     alias grep='grep --color=auto'
+    #alias fgrep='fgrep --color=auto'
+    #alias egrep='egrep --color=auto'
 fi
 
-alias ll='ls -alF'  # 詳細一覧（隠しファイル含む）
-alias la='ls -A'    # 隠しファイルも表示
-alias l='ls -CF'    # 種別記号付き一覧
+# colored GCC warnings and errors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# ─── 環境変数 ─────────────────────────────────────────────────────────────────
-# ~/.local/bin を PATH に追加（Ubuntu 26.04 デフォルト）
-# pip install --user や pipx でインストールしたコマンドの配置先
-export PATH="$HOME/.local/bin:$PATH"
-# [個人設定]
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your aliases in a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/
+# profile sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+# ─── 個人設定 ─────────────────────────────────────────────────────────────────
+
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
-# ─── bash 補完 ────────────────────────────────────────────────────────────────
-if ! shopt -oq posix; then
-    if [ -f /opt/homebrew/etc/profile.d/bash_completion.sh ]; then
-        # [個人設定] Homebrew bash-completion@2（Apple Silicon Mac 向け）
-        . /opt/homebrew/etc/profile.d/bash_completion.sh
-    elif [ -f /usr/share/bash-completion/bash_completion ]; then
-        # Ubuntu 標準インストール
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-fi
-
-# ─── プロンプト ───────────────────────────────────────────────────────────────
-# [個人設定] デフォルト PS1 を git ブランチ・変更状態付きプロンプトに置き換え
-# git-prompt.sh が見つかった場合のみ有効。見つからない場合は Ubuntu デフォルト相当にフォールバック
-_git_prompt_candidates=(
-    /opt/homebrew/share/git-core/contrib/completion/git-prompt.sh  # Homebrew git (Mac)
-    /usr/lib/git-core/git-sh-prompt                                 # Ubuntu apt git
-    /usr/share/git-core/contrib/completion/git-prompt.sh            # Ubuntu 新パス
-    ~/.git-prompt.sh                                                 # 手動配置
-)
-_loaded_git_prompt=0
-for _f in "${_git_prompt_candidates[@]}"; do
+# git ブランチ・変更状態付きプロンプト（git-prompt.sh がある場合のみ有効）
+# 見つからない場合は上の Ubuntu デフォルト PS1 をそのまま使用
+for _f in \
+    /usr/lib/git-core/git-sh-prompt \
+    /usr/share/git-core/contrib/completion/git-prompt.sh \
+    ~/.git-prompt.sh
+do
     if [ -f "$_f" ]; then
-        GIT_PS1_SHOWDIRTYSTATE=1  # 未コミットの変更がある場合に * を表示
+        GIT_PS1_SHOWDIRTYSTATE=1
         . "$_f"
         PS1='[\[\e[1;32m\]\u@\h \[\e[1;36m\]\w\[\e[1;31m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
-        _loaded_git_prompt=1
         break
     fi
 done
-if [ "$_loaded_git_prompt" -eq 0 ]; then
-    # フォールバック: Ubuntu デフォルト相当のカラープロンプト
-    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-fi
-unset _git_prompt_candidates _f _loaded_git_prompt
+unset _f
 
-# xterm 系ターミナルのタイトルバーに user@host: dir を表示する
-case "$TERM" in
-    xterm*|rxvt*)
-        PS1="\[\e]0;\u@\h: \w\a\]$PS1"
-        ;;
-esac
-
-# [個人設定] 複数ターミナルセッション間でコマンド履歴をリアルタイムに共有する
-# history -a: 現在のセッションの履歴をファイルに書き出す
-# history -r: ファイルから最新の履歴を読み込む
+# 複数ターミナルセッション間でコマンド履歴をリアルタイムに共有する
 export PROMPT_COMMAND='history -a; history -r'
