@@ -19,6 +19,10 @@ shopt -s histappend
 # ウィンドウサイズを毎回チェック
 shopt -s checkwinsize
 
+# ** を再帰的なワイルドカードとして使えるようにする（bash 4.0 以降）
+# 例: ls **/*.py → サブディレクトリも含めて全 .py ファイルを列挙
+shopt -s globstar
+
 # lesspipe（非テキストファイルを less で開けるようにする）
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -76,3 +80,7 @@ unset _git_prompt_candidates _f
 
 # 履歴をリアルタイムで共有
 export PROMPT_COMMAND='history -a; history -r'
+
+# ~/.local/bin を PATH に追加（Ubuntu 26.04 以降のデフォルト）
+# pip install --user や pipx でインストールしたコマンドの配置先
+export PATH="$HOME/.local/bin:$PATH"
