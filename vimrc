@@ -102,8 +102,15 @@ endif
 
 " コピー用トグル（F2）
 " マウス選択でコピーする際に行番号・不可視文字が混入するのを防ぐ
-" F2 を押すと list（不可視文字表示）と number（行番号）を同時にオン/オフできる
-nnoremap <F2> :setlocal list! number!<CR>
+" list の状態を基準に両方を同時に切り替えることで、独立したトグルによるずれを防ぐ
+function! ToggleCopyMode()
+    if &list
+        setlocal nolist nonumber
+    else
+        setlocal list number
+    endif
+endfunction
+nnoremap <F2> :call ToggleCopyMode()<CR>
       " F2: 不可視文字と行番号の表示をトグル（コピー前にOFF、コピー後にONに戻す）
 
 " その他
