@@ -113,6 +113,9 @@ endfunction
 nnoremap <F2> :call ToggleCopyMode()<CR>
       " F2: 不可視文字と行番号の表示をトグル（コピー前にOFF、コピー後にONに戻す）
 
+" netrw（Vim 組み込みのファイルブラウザ）は起動時に nonumber を強制設定するため上書きする
+autocmd FileType netrw setlocal number
+
 " その他
 set hidden " 未保存のバッファを隠しバッファとして残す（保存せず別ファイルへ移動できる）
 
