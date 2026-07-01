@@ -36,8 +36,8 @@ set matchtime=3      " 括弧ハイライトの表示時間（×0.1秒）
 set helpheight=999   " ヘルプを画面いっぱいに開く
 set formatoptions-=c " コメント行の自動折り返しを無効化
 set list             " タブ・末尾スペースなどの不可視文字を表示
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%
-                     " 不可視文字の表示記号（タブ: »-、末尾スペース: -、折り返し: »«）
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+                     " 不可視文字の表示記号（タブ: »-、末尾スペース: -、改行: ↲、折り返し: »«）
 set signcolumn=yes   " サイン列を常に表示（LSP診断アイコンによるテキストのずれを防ぐ）
 
 " ウィンドウ分割
