@@ -91,6 +91,21 @@ set wildmenu                   " 補完候補をメニュー表示
 set wildmode=longest:full,full " 1回目Tab: 共通部分まで補完、2回目Tab: 候補を順に選択
 set wildoptions=pum            " 補完候補をポップアップウィンドウで表示（Vim 8.1.2080以降）
 
+" クリップボード
+" macOS は unnamed（* レジスタ）、Linux は unnamedplus（+ レジスタ）がシステムクリップボードに対応する
+if has('mac')
+    set clipboard=unnamed
+else
+    set clipboard=unnamedplus
+endif
+" 上記設定により y/d/p が自動的にシステムクリップボードと連携する（"+y の明示も引き続き使える）
+
+" コピー用トグル（F2）
+" マウス選択でコピーする際に行番号・不可視文字が混入するのを防ぐ
+" F2 を押すと list（不可視文字表示）と number（行番号）を同時にオン/オフできる
+nnoremap <F2> :setlocal list! number!<CR>
+      " F2: 不可視文字と行番号の表示をトグル（コピー前にOFF、コピー後にONに戻す）
+
 " その他
 set hidden " 未保存のバッファを隠しバッファとして残す（保存せず別ファイルへ移動できる）
 
