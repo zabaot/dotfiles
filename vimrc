@@ -104,7 +104,7 @@ endif
 " マウス選択でコピーする際に行番号・不可視文字が混入するのを防ぐ
 " list の状態を基準に両方を同時に切り替えることで、独立したトグルによるずれを防ぐ
 function! ToggleCopyMode()
-    if &list
+    if &list || &number
         setlocal nolist nonumber
     else
         setlocal list number
