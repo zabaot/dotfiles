@@ -1,3 +1,9 @@
+# Homebrew の補完スクリプトを fpath に追加する
+# compinit（zprezto の completion モジュールが呼び出す）より前に追加しないと補完が効かない
+if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
+    fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+fi
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
