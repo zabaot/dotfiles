@@ -116,6 +116,28 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# tmux は公式に bash 補完スクリプトを同梱していないため、bash-completion が
+# 既定のファイル名補完（_comp_complete_minimal）にフォールバックしてしまい、
+# `tmux attach -t <Tab>` 等でセッション名が補完されない。
+# そのため -t/-s 引数はセッション名を補完する簡易関数を自前で登録する。
+_tmux_bash_completion() {
+    local cur prev
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    case "$prev" in
+        -t|-s)
+            COMPREPLY=( $(compgen -W "$(tmux list-sessions -F '#S' 2>/dev/null)" -- "$cur") )
+            return
+            ;;
+    esac
+
+    if [ "$COMP_CWORD" -eq 1 ]; then
+        COMPREPLY=( $(compgen -W "attach-session attach new-session new kill-session kill-server list-sessions ls rename-session switch-client detach-client" -- "$cur") )
+    fi
+}
+complete -F _tmux_bash_completion tmux
+
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
