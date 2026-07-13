@@ -9,6 +9,7 @@ Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマ
 - **フラット構成**: 設定ファイルをサブディレクトリに分けず、リポジトリ直下に並べる
 - **レガシー排除**: 非推奨ツールは使わない。常に最新バージョンを前提とする
 - **シンボリックリンク方式**: `install.sh` は設定ファイルをコピーせずシンボリックリンク（ショートカットのようなもの）を作成する。`~/.vimrc` などはリポジトリ内の実体ファイルへの参照になるため、リポジトリ内のファイルを編集すれば即座に反映される
+- **例外: `zshrc` / `bashrc` は直接シンボリックリンクにしない**: Claude Code や grok などのインストーラーは `~/.zshrc` / `~/.bashrc` に直接 `>>` で追記する。シンボリックリンクのままだとその追記がリポジトリ内の実体ファイルに書き込まれてしまい、無関係な git diff が発生し続ける。そのためホーム側は「リポジトリのファイルを `source` するだけの 1 行」を書いた実ファイルにし、インストーラーの追記先をリポジトリの外（git 管理外）に逃がしている（詳細は [install.sh が行うこと](#installsh-が行うこと)）
 
 ---
 
@@ -31,10 +32,10 @@ Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマ
 | -------- | -------- | ---- |
 | `vimrc` | 共通 | Vim の設定。vim-plug でプラグインを管理 |
 | `tmux.conf` | 共通 | tmux の設定。macOS / Linux を自動判別 |
-| `zshrc` | macOS | Zsh の個人設定（ls カラーを Ubuntu 標準に合わせるなど） |
+| `zshrc` | macOS | Zsh の個人設定（ls カラーを Ubuntu 標準に合わせるなど）。`~/.zshrc` からは直接シンボリックリンクではなく `source` される |
 | `zpreztorc` | macOS | zprezto のモジュール・プロンプト・キーバインド設定 |
 | `prompt_mysorin_setup` | macOS | zsh プロンプトのカスタムテーマ（zprezto の `sorin` テーマをベースに改変） |
-| `bashrc` | Ubuntu | Bash の設定 |
+| `bashrc` | Ubuntu | Bash の設定。`~/.bashrc` からは直接シンボリックリンクではなく `source` される |
 | `install.sh` | 共通 | シンボリックリンクの作成と vim-plug の自動インストール |
 | `LICENSE` | — | Apache License 2.0 |
 
@@ -102,37 +103,38 @@ cd ~/dotfiles
 
 > `<dotfiles>` は clone 先のパスです（例: `~/dotfiles`）。
 
-`install.sh` を実行すると、ホームディレクトリの設定ファイルがリポジトリ内の実体ファイルへのシンボリックリンクに置き換わります。
+`install.sh` を実行すると、ホームディレクトリの設定ファイルがリポジトリ内の実体ファイルへのシンボリックリンクに置き換わります。ただし `zshrc` / `bashrc` だけは例外で、シンボリックリンクではなく `source` 1 行だけを書いた実ファイルになります。
 
 ```text
-ホームディレクトリ（参照）            dotfiles リポジトリ（実体）
-~/.vimrc          ──────────────→  <dotfiles>/vimrc
-~/.tmux.conf      ──────────────→  <dotfiles>/tmux.conf
-~/.bashrc         ──────────────→  <dotfiles>/bashrc       （Ubuntu のみ）
-~/.zshrc          ──────────────→  <dotfiles>/zshrc        （macOS のみ）
-~/.zpreztorc      ──────────────→  <dotfiles>/zpreztorc    （macOS のみ）
+ホームディレクトリ                    dotfiles リポジトリ（実体）
+~/.vimrc          ──(symlink)───→  <dotfiles>/vimrc
+~/.tmux.conf      ──(symlink)───→  <dotfiles>/tmux.conf
+~/.zpreztorc      ──(symlink)───→  <dotfiles>/zpreztorc    （macOS のみ）
+~/.bashrc         ──(source)────→  <dotfiles>/bashrc       （Ubuntu のみ）
+~/.zshrc          ──(source)────→  <dotfiles>/zshrc        （macOS のみ）
 ```
 
-リポジトリ内のファイルを編集すると、次回ツール起動時から自動的に反映されます。
+リポジトリ内のファイルを編集すると、次回ツール起動時から自動的に反映されます（`zshrc` / `bashrc` も `source` されるだけなので同様）。
 
 #### Ubuntu（bash）
 
-1. `~/.vimrc` → `<dotfiles>/vimrc`
-2. `~/.tmux.conf` → `<dotfiles>/tmux.conf`
-3. `~/.bashrc` → `<dotfiles>/bashrc`
+1. `~/.vimrc` → `<dotfiles>/vimrc` へのシンボリックリンクを作成
+2. `~/.tmux.conf` → `<dotfiles>/tmux.conf` へのシンボリックリンクを作成
+3. `~/.bashrc` を「`<dotfiles>/bashrc` を `source` するだけの 1 行」を書いた実ファイルにする
 4. vim-plug を自動インストール
 
 #### macOS（zsh + zprezto）
 
 1. `~/.vimrc` → `<dotfiles>/vimrc` へのシンボリックリンクを作成
 2. `~/.tmux.conf` → `<dotfiles>/tmux.conf` へのシンボリックリンクを作成
-3. `~/.zshrc` → `<dotfiles>/zshrc` へのシンボリックリンクを作成
-   - zprezto の初期化と ls カラー設定を含む（内部で zprezto の `init.zsh` を source している）
+3. `~/.zshrc` を「`<dotfiles>/zshrc` を `source` するだけの 1 行」を書いた実ファイルにする
+   - zprezto の初期化と ls カラー設定は `<dotfiles>/zshrc` 側にある（内部で zprezto の `init.zsh` を source している）
 4. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
 5. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
 6. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 > 既存のファイルは上書きされず、実行日時のタイムスタンプ付きの名前（例: `.vimrc.bak.20240101120000`）でバックアップされます。
+> `zshrc` / `bashrc` は Claude Code や grok などのインストーラーが直接追記してくるため、シンボリックリンクにしていません。すでに `source` 1 行がセットアップ済みの場合、`install.sh` を再実行してもインストーラーが追記した内容は上書きされません（先頭の `source` 行があるかどうかで冪等に判定しています）。
 
 ### Vim プラグインのインストール
 
@@ -301,7 +303,7 @@ zprezto の `sorin` テーマをベースにカスタマイズしたテーマで
 
 ## 設定のカスタマイズ
 
-設定ファイルはシンボリックリンクなので、リポジトリ内のファイルを直接編集すれば即座に反映されます。
+設定ファイルはシンボリックリンク（`zshrc` / `bashrc` は `source`）なので、リポジトリ内のファイルを直接編集すれば即座に反映されます。
 
 ```bash
 # 例: Vim の設定を変更する
@@ -327,7 +329,7 @@ cd <dotfiles>
 git pull
 ```
 
-シンボリックリンクはそのままなので、`git pull` だけで全設定が最新になります。
+シンボリックリンク（および `zshrc` / `bashrc` の `source` 元）はそのままなので、`git pull` だけで全設定が最新になります。
 
 ---
 
@@ -505,27 +507,30 @@ unlink ~/.tmux.conf
 
 ## アンインストール
 
-dotfiles の使用をやめる場合は、作成したシンボリックリンクを削除します。
+dotfiles の使用をやめる場合は、作成したシンボリックリンクと `source` 用ファイルを削除します。
 
-### Ubuntu のシンボリックリンクを削除
+> `zshrc` / `bashrc` はシンボリックリンクではなく実ファイルなので `unlink` ではなく `rm` を使います。
+> インストーラーが追記した内容（PATH 設定など）もこのファイルごと消えるため、必要な行があれば事前に控えてください。
+
+### Ubuntu の設定ファイルを削除
 
 ```bash
 unlink ~/.vimrc
 unlink ~/.tmux.conf
-unlink ~/.bashrc
+rm ~/.bashrc
 ```
 
-### macOS のシンボリックリンクを削除
+### macOS の設定ファイルを削除
 
 ```zsh
 unlink ~/.vimrc
 unlink ~/.tmux.conf
-unlink ~/.zshrc
+rm ~/.zshrc
 unlink ~/.zpreztorc
 unlink ~/.zprezto/modules/prompt/functions/prompt_mysorin_setup
 ```
 
-シンボリックリンクを削除した後は、必要に応じて各ツールのデフォルト設定ファイルを再作成してください。
+削除した後は、必要に応じて各ツールのデフォルト設定ファイルを再作成してください。
 
 ---
 
@@ -540,10 +545,19 @@ chmod +x install.sh
 ./install.sh
 ```
 
-**`ln: ~/.zshrc: File exists`** のようなエラーが出る場合、対象ファイルがすでにシンボリックリンクとして存在しています（`install.sh` は通常のファイルのみバックアップし、既存のシンボリックリンクは `-sf` で上書きします）。エラーが続く場合は手動で確認してください。
+**`ln: ~/.vimrc: File exists`** のようなエラーが出る場合、対象ファイルがすでにシンボリックリンクとして存在しています（`install.sh` は通常のファイルのみバックアップし、既存のシンボリックリンクは `-sf` で上書きします）。エラーが続く場合は手動で確認してください。
 
 ```bash
-ls -la ~/.zshrc   # l で始まる行ならシンボリックリンク
+ls -la ~/.vimrc   # l で始まる行ならシンボリックリンク
+```
+
+**`~/.zshrc` / `~/.bashrc` に自分の変更（PATH 追加など）を書いたのに `install.sh` 再実行後も反映されている／消えている**
+
+この 2 ファイルはシンボリックリンクではなく、先頭に `source <dotfiles>/zshrc` (または `bashrc`) の 1 行がある実ファイルです。`install.sh` はこの `source` 行がすでにあるかどうかで「セットアップ済みか」を判定するため、通常は再実行してもインストーラーの追記内容を消しません。もし意図せず消えた場合は、`~/.zshrc.bak.<タイムスタンプ>` のようなバックアップが作成されていないか確認してください。
+
+```bash
+ls -la ~/.zshrc   # 1 行だけの source 行になっているか確認
+ls ~/.zshrc.bak.* 2>/dev/null
 ```
 
 ---
