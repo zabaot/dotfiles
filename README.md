@@ -156,6 +156,16 @@ cd ~/dotfiles
 
 更新内容を確認したい場合は `:PlugDiff` で差分を見られます。vim-plug 自体（ツール本体）を更新する場合は `:PlugUpgrade` を使います。
 
+> fzf 本体（バイナリ）は vimrc の `do` フックにより `:PlugUpdate` 実行時に自動で更新されます。
+
+LSP の言語サーバーは `:PlugUpdate` では更新されません。更新したい言語のファイルを開いて以下を実行すると、最新版で入れ直されます。
+
+```vim
+:LspInstallServer
+```
+
+インストール状態は `:LspStatus` で確認できます。
+
 ---
 
 ## Vim の設定詳細
