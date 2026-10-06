@@ -369,8 +369,13 @@ zprezto を更新すると、zprezto 側のデフォルト `zpreztorc` に新し
 zprezto を更新したとき（以下のコマンドを実行したとき）に確認してください。
 
 ```zsh
-git -C ~/.zprezto pull --recurse-submodules
+zprezto-update
 ```
+
+> `zprezto-update` は zprezto 組み込みの更新コマンドで、どのディレクトリから実行しても構いません。
+> `git pull --ff-only` で更新したうえで `git submodule sync` / `git submodule update --init` も行うため、
+> zprezto 側で submodule が追加・移転された場合も取りこぼしません。
+> 早送りできない場合（`~/.zprezto` を手元で変更しているなど）は何も変更せずに停止します。
 
 #### 確認手順
 
