@@ -55,6 +55,7 @@ link tmux.conf .tmux.conf
 if [ -d "$HOME/.zprezto" ]; then
     # Mac: zsh + zprezto
     link_via_source zshrc .zshrc
+    link_via_source zprofile .zprofile
     link zpreztorc .zpreztorc
     link prompt_mysorin_setup .zprezto/modules/prompt/functions/prompt_mysorin_setup
 else

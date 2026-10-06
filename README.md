@@ -33,6 +33,7 @@ Vim・tmux・シェル（zsh / bash）の設定を一元管理し、新しいマ
 | `vimrc` | 共通 | Vim の設定。vim-plug でプラグインを管理 |
 | `tmux.conf` | 共通 | tmux の設定。macOS / Linux を自動判別 |
 | `zshrc` | macOS | Zsh の個人設定（ls カラーを Ubuntu 標準に合わせるなど）。`~/.zshrc` からは直接シンボリックリンクではなく `source` される |
+| `zprofile` | macOS | ログインシェルの設定（`EDITOR=vim` など）。zprezto 本家の `runcoms/zprofile` を読み込んだうえで上書きする。`~/.zprofile` からは `source` される |
 | `zpreztorc` | macOS | zprezto のモジュール・プロンプト・キーバインド設定 |
 | `prompt_mysorin_setup` | macOS | zsh プロンプトのカスタムテーマ（zprezto の `sorin` テーマをベースに改変） |
 | `bashrc` | Ubuntu | Bash の設定。`~/.bashrc` からは直接シンボリックリンクではなく `source` される |
@@ -103,7 +104,7 @@ cd ~/dotfiles
 
 > `<dotfiles>` は clone 先のパスです（例: `~/dotfiles`）。
 
-`install.sh` を実行すると、ホームディレクトリの設定ファイルがリポジトリ内の実体ファイルへのシンボリックリンクに置き換わります。ただし `zshrc` / `bashrc` だけは例外で、シンボリックリンクではなく `source` 1 行だけを書いた実ファイルになります。
+`install.sh` を実行すると、ホームディレクトリの設定ファイルがリポジトリ内の実体ファイルへのシンボリックリンクに置き換わります。ただし `zshrc` / `zprofile` / `bashrc` だけは例外で、シンボリックリンクではなく `source` 1 行だけを書いた実ファイルになります。
 
 ```text
 ホームディレクトリ                    dotfiles リポジトリ（実体）
@@ -112,6 +113,7 @@ cd ~/dotfiles
 ~/.zpreztorc      ──(symlink)───→  <dotfiles>/zpreztorc    （macOS のみ）
 ~/.bashrc         ──(source)────→  <dotfiles>/bashrc       （Ubuntu のみ）
 ~/.zshrc          ──(source)────→  <dotfiles>/zshrc        （macOS のみ）
+~/.zprofile       ──(source)────→  <dotfiles>/zprofile     （macOS のみ）
 ```
 
 リポジトリ内のファイルを編集すると、次回ツール起動時から自動的に反映されます（`zshrc` / `bashrc` も `source` されるだけなので同様）。
@@ -129,12 +131,15 @@ cd ~/dotfiles
 2. `~/.tmux.conf` → `<dotfiles>/tmux.conf` へのシンボリックリンクを作成
 3. `~/.zshrc` を「`<dotfiles>/zshrc` を `source` するだけの 1 行」を書いた実ファイルにする
    - zprezto の初期化と ls カラー設定は `<dotfiles>/zshrc` 側にある（内部で zprezto の `init.zsh` を source している）
-4. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
-5. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
-6. vim-plug（Vim のプラグインマネージャー）を自動インストール
+4. `~/.zprofile` を「`<dotfiles>/zprofile` を `source` するだけの 1 行」を書いた実ファイルにする
+   - zprezto の初期化手順で作られる `~/.zprofile` → `~/.zprezto/runcoms/zprofile` のシンボリックリンクは置き換えられる
+   - `<dotfiles>/zprofile` は本家の `runcoms/zprofile` を読み込むので、本家の更新はそのまま反映される
+5. `~/.zpreztorc` → `<dotfiles>/zpreztorc` へのシンボリックリンクを作成
+6. `~/.zprezto/modules/prompt/functions/prompt_mysorin_setup` → `<dotfiles>/prompt_mysorin_setup` へのシンボリックリンクを作成
+7. vim-plug（Vim のプラグインマネージャー）を自動インストール
 
 > 既存のファイルは上書きされず、実行日時のタイムスタンプ付きの名前（例: `.vimrc.bak.20240101120000`）でバックアップされます。
-> `zshrc` / `bashrc` は Claude Code や grok などのインストーラーが直接追記してくるため、シンボリックリンクにしていません。すでに `source` 1 行がセットアップ済みの場合、`install.sh` を再実行してもインストーラーが追記した内容は上書きされません（先頭の `source` 行があるかどうかで冪等に判定しています）。
+> `zshrc` / `zprofile` / `bashrc` は Claude Code・grok・OrbStack などのインストーラーが直接追記してくるため、シンボリックリンクにしていません。すでに `source` 1 行がセットアップ済みの場合、`install.sh` を再実行してもインストーラーが追記した内容は上書きされません（先頭の `source` 行があるかどうかで冪等に判定しています）。
 
 ### Vim プラグインのインストール
 
@@ -534,7 +539,7 @@ unlink ~/.tmux.conf
 
 dotfiles の使用をやめる場合は、作成したシンボリックリンクと `source` 用ファイルを削除します。
 
-> `zshrc` / `bashrc` はシンボリックリンクではなく実ファイルなので `unlink` ではなく `rm` を使います。
+> `zshrc` / `zprofile` / `bashrc` はシンボリックリンクではなく実ファイルなので `unlink` ではなく `rm` を使います。
 > インストーラーが追記した内容（PATH 設定など）もこのファイルごと消えるため、必要な行があれば事前に控えてください。
 
 ### Ubuntu の設定ファイルを削除
@@ -551,6 +556,7 @@ rm ~/.bashrc
 unlink ~/.vimrc
 unlink ~/.tmux.conf
 rm ~/.zshrc
+rm ~/.zprofile
 unlink ~/.zpreztorc
 unlink ~/.zprezto/modules/prompt/functions/prompt_mysorin_setup
 ```
