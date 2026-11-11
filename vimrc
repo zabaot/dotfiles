@@ -140,6 +140,9 @@ nmap <silent> K  <plug>(lsp-hover)
 let g:lsp_diagnostics_echo_cursor = 1
       " カーソルを合わせたときにエラー・警告のメッセージをコマンドラインに表示する
 
+" Python では型チェック（ty）と Lint/Format（ruff）の2つの言語サーバを同時に使う
+let g:lsp_settings_filetype_python = ['ty', 'ruff']
+
 " 補完キーマップ（入力モード）
 " asyncomplete は入力中に自動で補完候補をポップアップ表示するプラグイン。
 " <expr> を使うことで「補完ポップアップが表示されているかどうか」で動作を切り替えている
